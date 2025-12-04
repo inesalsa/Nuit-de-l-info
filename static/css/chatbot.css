@@ -1,0 +1,428 @@
+/* ============================================
+   NIRDBOT - Styles Chatbot
+   ============================================ */
+
+.nirdbot-hidden {
+    display: none !important;
+}
+
+/* Bouton flottant */
+.nirdbot-toggle {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4A90E2, #357ABD);
+    border: none;
+    box-shadow: 0 4px 20px rgba(74, 144, 226, 0.4);
+    cursor: pointer;
+    z-index: 9998;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.nirdbot-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 30px rgba(74, 144, 226, 0.6);
+}
+
+.nirdbot-icon {
+    font-size: 2rem;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+.nirdbot-pulse {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: rgba(74, 144, 226, 0.4);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+/* Fenêtre de chat */
+.nirdbot-window {
+    position: fixed;
+    bottom: 6rem;
+    right: 2rem;
+    width: 400px;
+    max-width: calc(100vw - 4rem);
+    height: 600px;
+    max-height: calc(100vh - 10rem);
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Header */
+.nirdbot-header {
+    background: linear-gradient(135deg, #4A90E2, #357ABD);
+    color: white;
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nirdbot-header-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.nirdbot-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.nirdbot-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.nirdbot-status {
+    margin: 0;
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
+.nirdbot-close {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.nirdbot-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Messages */
+.nirdbot-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+    background: #F5F7FA;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.nirdbot-message {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.nirdbot-message-bot {
+    justify-content: flex-start;
+}
+
+.nirdbot-message-user {
+    justify-content: flex-end;
+}
+
+.nirdbot-bubble {
+    max-width: 75%;
+    padding: 0.75rem 1rem;
+    border-radius: 15px;
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
+.nirdbot-message-bot .nirdbot-bubble {
+    background: white;
+    color: #2D3748;
+    border-bottom-left-radius: 5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.nirdbot-message-user .nirdbot-bubble {
+    background: linear-gradient(135deg, #4A90E2, #357ABD);
+    color: white;
+    border-bottom-right-radius: 5px;
+}
+
+.nirdbot-bubble strong {
+    font-weight: 600;
+}
+
+.nirdbot-bubble ul {
+    margin: 0.5rem 0;
+}
+
+/* Typing indicator */
+.nirdbot-typing {
+    display: flex;
+    gap: 5px;
+    padding: 1rem;
+}
+
+.nirdbot-typing span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #CBD5E0;
+    animation: typing 1.4s infinite;
+}
+
+.nirdbot-typing span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.nirdbot-typing span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typing {
+    0%, 60%, 100% {
+        transform: translateY(0);
+    }
+    30% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Quick replies */
+.nirdbot-quick-replies {
+    padding: 0 1.5rem 1rem;
+    background: #F5F7FA;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.nirdbot-quick-reply {
+    background: white;
+    border: 2px solid #4A90E2;
+    color: #4A90E2;
+    padding: 0.6rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.nirdbot-quick-reply:hover {
+    background: #4A90E2;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+}
+
+/* Solutions cards */
+.nirdbot-solutions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.nirdbot-solution-card {
+    background: linear-gradient(135deg, #4A90E2, #357ABD);
+    color: white;
+    padding: 1rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    transition: all 0.3s;
+    box-shadow: 0 2px 8px rgba(74, 144, 226, 0.3);
+}
+
+.nirdbot-solution-card:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 16px rgba(74, 144, 226, 0.4);
+}
+
+.solution-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.solution-name {
+    flex: 1;
+    font-weight: 500;
+}
+
+.solution-arrow {
+    font-size: 1.2rem;
+    opacity: 0.8;
+}
+
+/* Input */
+.nirdbot-input-container {
+    padding: 1rem 1.5rem;
+    background: white;
+    border-top: 1px solid #E2E8F0;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.nirdbot-input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 2px solid #E2E8F0;
+    border-radius: 25px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.nirdbot-input:focus {
+    border-color: #4A90E2;
+}
+
+.nirdbot-input:disabled {
+    background: #F7FAFC;
+    cursor: not-allowed;
+}
+
+.nirdbot-send {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4A90E2, #357ABD);
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.nirdbot-send:hover:not(:disabled) {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.4);
+}
+
+.nirdbot-send:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Footer */
+.nirdbot-footer {
+    padding: 0.75rem 1.5rem;
+    background: #F7FAFC;
+    border-top: 1px solid #E2E8F0;
+    display: flex;
+    justify-content: center;
+}
+
+.nirdbot-restart-btn {
+    background: transparent;
+    border: 1px solid #CBD5E0;
+    color: #718096;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+.nirdbot-restart-btn:hover {
+    background: #EDF2F7;
+    border-color: #4A90E2;
+    color: #4A90E2;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .nirdbot-toggle {
+        bottom: 1.5rem;
+        right: 1.5rem;
+        width: 55px;
+        height: 55px;
+    }
+
+    .nirdbot-window {
+        bottom: 5rem;
+        right: 1rem;
+        left: 1rem;
+        width: auto;
+        height: 500px;
+    }
+
+    .nirdbot-bubble {
+        max-width: 85%;
+    }
+
+    .nirdbot-quick-reply {
+        font-size: 0.85rem;
+        padding: 0.5rem 0.75rem;
+    }
+}
+
+/* Scrollbar personnalisée */
+.nirdbot-messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+.nirdbot-messages::-webkit-scrollbar-track {
+    background: #EDF2F7;
+}
+
+.nirdbot-messages::-webkit-scrollbar-thumb {
+    background: #CBD5E0;
+    border-radius: 3px;
+}
+
+.nirdbot-messages::-webkit-scrollbar-thumb:hover {
+    background: #A0AEC0;
+}

@@ -1,0 +1,239 @@
+{% extends "base.html" %}
+
+{% block title %}L'Histoire - NIRD Quest{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>📖 Le Village Numérique Résilient</h1>
+    <p style="font-size: 1.2rem; font-style: italic; color: var(--accent-color); text-align: center; margin: 2rem 0;">
+        Il était une fois, dans un territoire lointain...
+    </p>
+</div>
+
+<div class="card">
+    <div style="display: flex; gap: 2rem; align-items: center; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 300px;">
+            <h2>🌟 Rencontrez Luma</h2>
+            <p style="font-size: 1.1rem; line-height: 1.8;">
+                Je suis <strong>Luma</strong>, la mascotte lumineuse du Village Numérique Résilient.
+                Bienvenue dans notre monde !
+            </p>
+            <p>
+                Notre village est une école ordinaire... enfin, presque ! Nous avons décidé de résister
+                face à l'<strong>Empire Numérico</strong>, cette force gigantesque qui veut nous rendre
+                dépendants de leurs technologies.
+            </p>
+        </div>
+        <div style="flex: 0 0 200px;">
+            <svg width="200" height="200" viewBox="0 0 200 200">
+                <!-- Luma - personnage lumineux -->
+                <defs>
+                    <radialGradient id="lumaGlow">
+                        <stop offset="0%" stop-color="#FFD700" stop-opacity="0.8"/>
+                        <stop offset="100%" stop-color="#4A90E2" stop-opacity="0.2"/>
+                    </radialGradient>
+                </defs>
+                
+                <!-- Lueur -->
+                <circle cx="100" cy="100" r="80" fill="url(#lumaGlow)"/>
+                
+                <!-- Corps -->
+                <circle cx="100" cy="100" r="50" fill="#FFD700"/>
+                
+                <!-- Yeux -->
+                <circle cx="85" cy="90" r="8" fill="#1A2332"/>
+                <circle cx="115" cy="90" r="8" fill="#1A2332"/>
+                <circle cx="88" cy="88" r="3" fill="white"/>
+                <circle cx="118" cy="88" r="3" fill="white"/>
+                
+                <!-- Sourire -->
+                <path d="M 80 110 Q 100 125 120 110" stroke="#1A2332" stroke-width="3" fill="none" stroke-linecap="round"/>
+                
+                <!-- Antennes -->
+                <line x1="80" y1="60" x2="75" y2="40" stroke="#4A90E2" stroke-width="3" stroke-linecap="round"/>
+                <line x1="120" y1="60" x2="125" y2="40" stroke="#4A90E2" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="75" cy="40" r="5" fill="#50C878"/>
+                <circle cx="125" cy="40" r="5" fill="#50C878"/>
+            </svg>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>😈 L'Empire Numérico</h2>
+    <div style="display: flex; gap: 2rem; align-items: center; flex-wrap: wrap;">
+        <div style="flex: 0 0 200px;">
+            <svg width="200" height="200" viewBox="0 0 200 200">
+                <!-- Agent Cloudox - méchant rigolo -->
+                <defs>
+                    <linearGradient id="cloudGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#E74C3C"/>
+                        <stop offset="100%" stop-color="#C0392B"/>
+                    </linearGradient>
+                </defs>
+                
+                <!-- Nuage maléfique -->
+                <ellipse cx="100" cy="100" rx="60" ry="40" fill="url(#cloudGradient)"/>
+                <ellipse cx="70" cy="90" rx="30" ry="25" fill="url(#cloudGradient)"/>
+                <ellipse cx="130" cy="90" rx="30" ry="25" fill="url(#cloudGradient)"/>
+                
+                <!-- Yeux méchants -->
+                <ellipse cx="85" cy="95" rx="10" ry="15" fill="#1A2332"/>
+                <ellipse cx="115" cy="95" rx="10" ry="15" fill="#1A2332"/>
+                <ellipse cx="88" cy="93" rx="3" ry="5" fill="#E74C3C"/>
+                <ellipse cx="118" cy="93" rx="3" ry="5" fill="#E74C3C"/>
+                
+                <!-- Sourire maléfique -->
+                <path d="M 80 115 Q 100 105 120 115" stroke="#1A2332" stroke-width="3" fill="none" stroke-linecap="round"/>
+                
+                <!-- Éclairs -->
+                <path d="M 60 130 L 50 160 L 65 145 L 55 170" stroke="#FFD700" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <path d="M 140 130 L 150 160 L 135 145 L 145 170" stroke="#FFD700" stroke-width="3" fill="none" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <div style="flex: 1; min-width: 300px;">
+            <p style="font-size: 1.1rem; line-height: 1.8;">
+                L'Empire Numérico, c'est le symbole de toutes les forces qui menacent notre autonomie numérique :
+            </p>
+            <ul style="margin-left: 2rem; margin-top: 1rem; line-height: 2;">
+                <li>🏢 Les <strong>Big Tech</strong> qui veulent nous rendre dépendants</li>
+                <li>📱 L'<strong>obsolescence programmée</strong> qui force à jeter du matériel</li>
+                <li>☁️ Le <strong>Cloud hors Europe</strong> qui vole nos données</li>
+                <li>💰 Les <strong>abonnements perpétuels</strong> qui vident les budgets</li>
+                <li>🔒 Le <strong>verrouillage technologique</strong> qui nous prive de liberté</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="card" style="background: rgba(231, 76, 60, 0.1); border-color: var(--danger-color);">
+    <h2>⚠️ La menace approche...</h2>
+    <p style="font-size: 1.1rem; line-height: 1.8;">
+        Ces derniers temps, plusieurs catastrophes ont frappé notre village :
+    </p>
+    
+    <div style="display: grid; gap: 1.5rem; margin-top: 2rem;">
+        <div class="feedback negative">
+            <h3>🖥️ Windows 10 : fin de support</h3>
+            <p>Microsoft nous demande de jeter 40 ordinateurs "trop vieux" et d'en acheter des neufs. Coût : 30 000€ !</p>
+        </div>
+        
+        <div class="feedback negative">
+            <h3>☁️ Données en danger</h3>
+            <p>Nos fichiers sont stockés sur des serveurs américains. Nos données d'élèves sont-elles protégées ?</p>
+        </div>
+        
+        <div class="feedback negative">
+            <h3>💰 Abonnements qui explosent</h3>
+            <p>Google Workspace, Microsoft 365, Adobe... Chaque année, les factures augmentent. Jusqu'à quand ?</p>
+        </div>
+        
+        <div class="feedback negative">
+            <h3>🗑️ Déchets électroniques</h3>
+            <p>20 ordinateurs jetés l'an dernier, encore fonctionnels. Des tonnes de CO2 pour rien...</p>
+        </div>
+    </div>
+</div>
+
+<div class="card" style="background: rgba(80, 200, 120, 0.1); border-color: var(--accent-color);">
+    <h2>🦸 Vous êtes notre espoir !</h2>
+    <div style="display: flex; gap: 2rem; align-items: center; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 300px;">
+            <p style="font-size: 1.2rem; line-height: 1.8;">
+                Le conseil du village vous nomme <strong>Conseiller Numérique</strong>.
+            </p>
+            <p>
+                Votre mission : <strong>protéger le village</strong> en appliquant les principes NIRD
+                (Numérique Inclusif, Responsable et Durable).
+            </p>
+            <p>
+                Vous allez devoir faire des choix cruciaux sur :
+            </p>
+            <ul style="margin-left: 2rem; line-height: 2;">
+                <li>♻️ Le matériel informatique</li>
+                <li>💻 Les logiciels et systèmes d'exploitation</li>
+                <li>☁️ Le stockage des données</li>
+                <li>💰 L'allocation du budget</li>
+                <li>🤝 La mutualisation des ressources</li>
+            </ul>
+        </div>
+        <div style="flex: 0 0 200px;">
+            <svg width="200" height="200" viewBox="0 0 200 200">
+                <!-- Badge de conseiller -->
+                <circle cx="100" cy="100" r="80" fill="#4A90E2" opacity="0.2"/>
+                <circle cx="100" cy="100" r="60" fill="none" stroke="#FFD700" stroke-width="4"/>
+                
+                <!-- Étoile -->
+                <path d="M 100 60 L 110 85 L 137 90 L 118 110 L 122 137 L 100 125 L 78 137 L 82 110 L 63 90 L 90 85 Z" 
+                      fill="#FFD700" stroke="#4A90E2" stroke-width="2"/>
+                
+                <text x="100" y="165" text-anchor="middle" font-size="16" fill="white" font-weight="bold">
+                    CONSEILLER
+                </text>
+            </svg>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>🤝 Vos alliés</h2>
+    <div style="display: grid; gap: 2rem; margin-top: 2rem;">
+        <div style="display: flex; gap: 1.5rem; align-items: center; background: var(--bg-secondary); padding: 1.5rem; border-radius: 10px;">
+            <svg width="80" height="80" viewBox="0 0 80 80">
+                <!-- Maître Récupix -->
+                <circle cx="40" cy="35" r="20" fill="#7B68EE"/>
+                <rect x="30" y="50" width="20" height="25" fill="#4A90E2" rx="3"/>
+                <circle cx="33" cy="30" r="4" fill="white"/>
+                <circle cx="47" cy="30" r="4" fill="white"/>
+                <circle cx="33" cy="30" r="2" fill="#1A2332"/>
+                <circle cx="47" cy="30" r="2" fill="#1A2332"/>
+                <path d="M 35 40 Q 40 43 45 40" stroke="#1A2332" stroke-width="2" fill="none"/>
+                <rect x="25" y="15" width="30" height="3" fill="#FFD700"/>
+            </svg>
+            <div>
+                <h3>🧙 Maître Récupix</h3>
+                <p>Expert du réemploi et gourou de Linux. Il vous guidera dans vos choix techniques et vous apprendra à prolonger la vie de votre matériel.</p>
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 1.5rem; align-items: center; background: var(--bg-secondary); padding: 1.5rem; border-radius: 10px;">
+            <svg width="80" height="80" viewBox="0 0 80 80">
+                <!-- Les Numérins -->
+                <rect x="15" y="25" width="20" height="25" fill="#50C878" rx="3"/>
+                <rect x="30" y="20" width="20" height="25" fill="#4A90E2" rx="3"/>
+                <rect x="45" y="25" width="20" height="25" fill="#F39C12" rx="3"/>
+                
+                <rect x="18" y="30" width="6" height="6" fill="#1A2332"/>
+                <rect x="26" y="30" width="6" height="6" fill="#1A2332"/>
+                <rect x="33" y="25" width="6" height="6" fill="#1A2332"/>
+                <rect x="41" y="25" width="6" height="6" fill="#1A2332"/>
+                <rect x="48" y="30" width="6" height="6" fill="#1A2332"/>
+                <rect x="56" y="30" width="6" height="6" fill="#1A2332"/>
+            </svg>
+            <div>
+                <h3>💻 Les Numérins</h3>
+                <p>De petits ordinateurs vivants qui peuplent le village. Ils vous aideront dans les mini-jeux et vous donneront des indices.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card" style="text-align: center; background: linear-gradient(135deg, rgba(74, 144, 226, 0.2), rgba(80, 200, 120, 0.2));">
+    <h2>🎮 Êtes-vous prêt(e) ?</h2>
+    <p style="font-size: 1.2rem; margin: 2rem 0;">
+        Le village compte sur vous. Chaque décision aura des conséquences sur :
+    </p>
+    
+    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin: 2rem 0;">
+        <span class="score-badge">♻️ Durabilité</span>
+        <span class="score-badge">🔓 Autonomie</span>
+        <span class="score-badge">🌍 Souveraineté</span>
+        <span class="score-badge">🌱 Sobriété</span>
+        <span class="score-badge">🤝 Inclusion</span>
+    </div>
+    
+    <a href="/game" class="btn btn-success" style="font-size: 1.3rem; padding: 1.5rem 3rem; margin-top: 2rem;">
+        🚀 Protéger le village !
+    </a>
+</div>
+{% endblock %}

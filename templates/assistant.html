@@ -1,0 +1,225 @@
+{% extends "base.html" %}
+
+{% block title %}Assistant IA - NIRD Quest{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>🤖 Assistant IA Personnalisé</h1>
+    <p style="font-size: 1.2rem; line-height: 1.8;">
+        <strong>Luma</strong>, notre mascotte IA, analyse vos choix et vous génère
+        un <strong>plan d'action NIRD sur mesure</strong> pour votre établissement.
+    </p>
+</div>
+
+<div class="card">
+    <div style="display: flex; gap: 2rem; align-items: center; flex-wrap: wrap;">
+        <div style="flex: 0 0 150px;">
+            <svg width="150" height="150" viewBox="0 0 200 200">
+                <!-- Luma IA -->
+                <defs>
+                    <radialGradient id="aiGlow">
+                        <stop offset="0%" stop-color="#4A90E2" stop-opacity="0.8"/>
+                        <stop offset="100%" stop-color="#7B68EE" stop-opacity="0.2"/>
+                    </radialGradient>
+                </defs>
+                
+                <circle cx="100" cy="100" r="80" fill="url(#aiGlow)">
+                    <animate attributeName="r" values="75;85;75" dur="2s" repeatCount="indefinite"/>
+                </circle>
+                
+                <circle cx="100" cy="100" r="50" fill="#4A90E2"/>
+                
+                <circle cx="85" cy="90" r="8" fill="#1A2332"/>
+                <circle cx="115" cy="90" r="8" fill="#1A2332"/>
+                <circle cx="88" cy="88" r="3" fill="white"/>
+                <circle cx="118" cy="88" r="3" fill="white"/>
+                
+                <path d="M 80 110 Q 100 125 120 110" stroke="#1A2332" stroke-width="3" fill="none" stroke-linecap="round"/>
+                
+                <line x1="80" y1="60" x2="75" y2="40" stroke="#7B68EE" stroke-width="3" stroke-linecap="round"/>
+                <line x1="120" y1="60" x2="125" y2="40" stroke="#7B68EE" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="75" cy="40" r="5" fill="#FFD700">
+                    <animate attributeName="fill" values="#FFD700;#50C878;#FFD700" dur="1.5s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="125" cy="40" r="5" fill="#50C878">
+                    <animate attributeName="fill" values="#50C878;#FFD700;#50C878" dur="1.5s" repeatCount="indefinite"/>
+                </circle>
+            </svg>
+        </div>
+        <div style="flex: 1; min-width: 300px;">
+            <h2>Comment ça marche ?</h2>
+            <ol style="margin-left: 1.5rem; line-height: 2;">
+                <li>L'IA analyse vos <strong>5 scores NIRD</strong> du mini-jeu</li>
+                <li>Elle identifie vos <strong>forces et faiblesses</strong></li>
+                <li>Elle génère un <strong>plan d'action en 5 étapes</strong></li>
+                <li>Elle vous donne un <strong>message inspirant</strong></li>
+            </ol>
+            <p style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.95rem;">
+                💡 <em>Propulsé par Mistral AI, l'intelligence artificielle libre et souveraine française.</em>
+            </p>
+        </div>
+    </div>
+</div>
+
+<div id="generate-section" class="card" style="text-align: center; background: linear-gradient(135deg, rgba(74, 144, 226, 0.1), rgba(123, 104, 238, 0.1));">
+    <h2>🚀 Générer mon plan d'action</h2>
+    <p style="font-size: 1.1rem; margin: 1.5rem 0;">
+        Cliquez sur le bouton ci-dessous pour obtenir votre plan personnalisé basé sur vos choix.
+    </p>
+    
+    <button id="generate-btn" class="btn btn-success" onclick="generatePlan()" style="font-size: 1.2rem; padding: 1.2rem 2.5rem;">
+        ✨ Générer mon plan
+    </button>
+    
+    <p style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.9rem;">
+        ⚠️ Vous devez avoir joué au mini-jeu d'abord
+    </p>
+</div>
+
+<div id="loading-section" style="display: none; text-align: center; padding: 3rem;">
+    <div class="loader"></div>
+    <p style="color: var(--text-secondary); margin-top: 1rem; font-size: 1.1rem;">
+        🧠 Luma analyse vos choix et prépare votre plan...
+    </p>
+    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">
+        Cela peut prendre 10-15 secondes
+    </p>
+</div>
+
+<div id="result-section" class="card" style="display: none;">
+    <h2>📋 Votre Plan d'Action NIRD</h2>
+    <div id="plan-content" style="background: var(--bg-secondary); padding: 2rem; border-radius: 10px; line-height: 1.8; margin-top: 1.5rem; white-space: pre-wrap; font-size: 1.05rem;">
+        <!-- Le contenu sera inséré ici -->
+    </div>
+    
+    <div style="text-align: center; margin-top: 2rem;">
+        <button class="btn" onclick="copyPlan()">
+            📋 Copier le plan
+        </button>
+        <button class="btn btn-secondary" onclick="generatePlan()" style="margin-left: 1rem;">
+            🔄 Générer un nouveau plan
+        </button>
+    </div>
+</div>
+
+<div id="error-section" class="card" style="display: none; background: rgba(231, 76, 60, 0.1); border-color: var(--danger-color);">
+    <h3>⚠️ Erreur</h3>
+    <p id="error-message" style="margin-top: 1rem;"></p>
+    <div style="margin-top: 1.5rem;">
+        <a href="/game" class="btn">
+            🎮 Jouer d'abord
+        </a>
+        <button class="btn btn-secondary" onclick="location.reload()" style="margin-left: 1rem;">
+            🔄 Réessayer
+        </button>
+    </div>
+</div>
+
+<div class="card">
+    <h2>💡 Conseils pour utiliser votre plan</h2>
+    <div style="display: grid; gap: 1.5rem; margin-top: 1.5rem;">
+        <div style="display: flex; gap: 1rem; align-items: start;">
+            <span style="font-size: 2rem;">📝</span>
+            <div>
+                <h3>Adaptez à votre contexte</h3>
+                <p>Le plan est une base. Ajustez-le selon vos contraintes budgétaires, humaines et techniques.</p>
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 1rem; align-items: start;">
+            <span style="font-size: 2rem;">👥</span>
+            <div>
+                <h3>Impliquez l'équipe</h3>
+                <p>Partagez le plan avec vos collègues. La transition NIRD se fait collectivement.</p>
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 1rem; align-items: start;">
+            <span style="font-size: 2rem;">⏱️</span>
+            <div>
+                <h3>Avancez étape par étape</h3>
+                <p>Pas besoin de tout faire en une fois. Commencez petit, testez, ajustez, déployez.</p>
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 1rem; align-items: start;">
+            <span style="font-size: 2rem;">🤝</span>
+            <div>
+                <h3>Mutualisez avec d'autres</h3>
+                <p>Contactez d'autres établissements pour partager ressources et expériences.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let generatedPlan = '';
+
+async function generatePlan() {
+    // Masquer les sections
+    document.getElementById('generate-section').style.display = 'none';
+    document.getElementById('result-section').style.display = 'none';
+    document.getElementById('error-section').style.display = 'none';
+    document.getElementById('loading-section').style.display = 'block';
+    
+    try {
+        const response = await fetch('/api/generate_plan', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.plan) {
+            // Afficher le plan
+            generatedPlan = data.plan;
+            document.getElementById('plan-content').textContent = data.plan;
+            document.getElementById('loading-section').style.display = 'none';
+            document.getElementById('result-section').style.display = 'block';
+            
+            // Scroll vers le résultat
+            document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });
+        } else {
+            throw new Error(data.error || 'Erreur inconnue');
+        }
+        
+    } catch (error) {
+        console.error('Erreur:', error);
+        document.getElementById('loading-section').style.display = 'none';
+        document.getElementById('error-section').style.display = 'block';
+        
+        let errorMsg = 'Une erreur est survenue lors de la génération du plan.';
+        
+        if (error.message.includes('Clé API')) {
+            errorMsg = "⚙️ L'assistant IA n'est pas configuré. Consultez la section Solutions pour des recommandations générales.";
+        } else if (error.message.includes('indisponible')) {
+            errorMsg = "☁️ Le service IA est temporairement indisponible. Réessayez dans quelques instants.";
+        }
+        
+        document.getElementById('error-message').textContent = errorMsg;
+    }
+}
+
+function copyPlan() {
+    navigator.clipboard.writeText(generatedPlan).then(() => {
+        showToast('Plan copié dans le presse-papier !', 'success');
+    }).catch(() => {
+        showToast('Erreur lors de la copie', 'error');
+    });
+}
+
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = `<strong>${type === 'success' ? '✅' : '❌'}</strong> ${message}`;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.style.animation = 'slideInRight 0.3s ease-out reverse';
+        setTimeout(() => toast.remove(), 300);
+    }, 2500);
+}
+</script>
+{% endblock %}

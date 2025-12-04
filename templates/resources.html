@@ -1,0 +1,504 @@
+{% extends "base.html" %}
+
+{% block title %}Ressources NIRD - Tutoriels et Guides{% endblock %}
+
+{% block extra_css %}
+<style>
+    .resources-hero {
+        background: linear-gradient(135deg, #8BC34A, #558B2F);
+        color: white;
+        padding: 4rem 2rem;
+        text-align: center;
+        border-radius: 20px;
+        margin-bottom: 3rem;
+    }
+
+    .resources-hero h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .resource-section {
+        background: white;
+        border-radius: 15px;
+        padding: 3rem;
+        margin-bottom: 3rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    .resource-section h2 {
+        color: #8BC34A;
+        font-size: 2rem;
+        margin-bottom: 2rem;
+        border-bottom: 3px solid #4A90E2;
+        padding-bottom: 1rem;
+    }
+
+    .resource-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .resource-card {
+        border: 2px solid #E2E8F0;
+        border-radius: 12px;
+        padding: 2rem;
+        transition: all 0.3s;
+        background: #F7FAFC;
+    }
+
+    .resource-card:hover {
+        border-color: #8BC34A;
+        box-shadow: 0 8px 20px rgba(139, 195, 74, 0.2);
+        transform: translateY(-5px);
+    }
+
+    .resource-card h3 {
+        color: #2D3748;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .resource-card .icon {
+        font-size: 2rem;
+    }
+
+    .resource-card .difficulty {
+        display: inline-block;
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-size: 0.85rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+    }
+
+    .difficulty.easy {
+        background: #8BC34A;
+        color: white;
+    }
+
+    .difficulty.medium {
+        background: #FF9800;
+        color: white;
+    }
+
+    .difficulty.hard {
+        background: #F44336;
+        color: white;
+    }
+
+    .tutorial-steps {
+        list-style: none;
+        padding: 0;
+        margin: 1.5rem 0;
+    }
+
+    .tutorial-steps li {
+        padding: 1rem;
+        margin-bottom: 0.5rem;
+        background: white;
+        border-left: 4px solid #8BC34A;
+        border-radius: 5px;
+    }
+
+    .tutorial-steps li strong {
+        color: #4A90E2;
+    }
+
+    .btn-resource {
+        display: inline-block;
+        background: linear-gradient(135deg, #8BC34A, #558B2F);
+        color: white;
+        padding: 0.8rem 1.5rem;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: all 0.3s;
+        margin-top: 1rem;
+    }
+
+    .btn-resource:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(139, 195, 74, 0.4);
+    }
+
+    .video-embed {
+        position: relative;
+        padding-bottom: 56.25%;
+        height: 0;
+        overflow: hidden;
+        max-width: 100%;
+        background: #000;
+        border-radius: 10px;
+        margin: 1.5rem 0;
+    }
+
+    .video-embed iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .community-links {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .community-card {
+        background: linear-gradient(135deg, #4A90E2, #357ABD);
+        color: white;
+        padding: 2rem;
+        border-radius: 12px;
+        text-align: center;
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+
+    .community-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(74, 144, 226, 0.4);
+    }
+
+    .community-card .icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .download-box {
+        background: #E8F5E9;
+        border: 2px solid #8BC34A;
+        border-radius: 10px;
+        padding: 2rem;
+        margin: 2rem 0;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .download-box .icon {
+        font-size: 3rem;
+    }
+
+    .download-box h4 {
+        color: #558B2F;
+        margin-bottom: 0.5rem;
+    }
+
+    .faq-item {
+        background: white;
+        border: 1px solid #E2E8F0;
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .faq-item h4 {
+        color: #4A90E2;
+        margin-bottom: 0.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="resources-hero">
+    <h1>📚 Ressources NIRD</h1>
+    <p style="font-size: 1.3rem;">Tutoriels, guides et outils pour votre transition numérique</p>
+</div>
+
+<!-- SECTION DÉBUTANTS -->
+<div class="resource-section" id="debutant">
+    <h2>🌱 Pour les Débutants</h2>
+    <p style="font-size: 1.1rem; color: #4A5568; margin-bottom: 2rem;">
+        Commencez ici ! Ressources simples pour faire vos premiers pas vers le numérique responsable.
+    </p>
+
+    <div class="resource-grid">
+        <!-- Framasoft -->
+        <div class="resource-card">
+            <h3><span class="icon">🇫🇷</span> Framasoft</h3>
+            <div class="difficulty easy">Débutant</div>
+            <p><strong>Le point de départ idéal !</strong></p>
+            <p>Association française proposant des alternatives libres aux GAFAM, avec tutoriels en français.</p>
+            
+            <ul style="list-style: none; padding: 0; margin: 1rem 0;">
+                <li>✓ Framapad (alternative Google Docs)</li>
+                <li>✓ Framadate (alternative Doodle)</li>
+                <li>✓ Framaforms (formulaires)</li>
+                <li>✓ +40 services gratuits</li>
+            </ul>
+
+            <a href="https://framasoft.org" target="_blank" class="btn-resource">Découvrir Framasoft</a>
+        </div>
+
+        <!-- LinuxFr -->
+        <div class="resource-card">
+            <h3><span class="icon">🇫🇷</span> LinuxFr.org</h3>
+            <div class="difficulty easy">Débutant</div>
+            <p><strong>Communauté francophone bienveillante</strong></p>
+            <p>Forum, actualités et entraide sur Linux et le logiciel libre en français.</p>
+            
+            <ul style="list-style: none; padding: 0; margin: 1rem 0;">
+                <li>✓ Actualités quotidiennes</li>
+                <li>✓ Forum d'entraide actif</li>
+                <li>✓ Tutoriels débutants</li>
+                <li>✓ Dépêches techniques</li>
+            </ul>
+
+            <a href="https://linuxfr.org" target="_blank" class="btn-resource">Visiter LinuxFr</a>
+        </div>
+
+        <!-- Wikipédia -->
+        <div class="resource-card">
+            <h3><span class="icon">📖</span> Wikipédia - Logiciel Libre</h3>
+            <div class="difficulty easy">Débutant</div>
+            <p><strong>Comprendre les bases</strong></p>
+            <p>Articles détaillés sur les licences libres, Linux, le logiciel libre et la culture libre.</p>
+            
+            <a href="https://fr.wikipedia.org/wiki/Logiciel_libre" target="_blank" class="btn-resource">Lire sur Wikipédia</a>
+        </div>
+    </div>
+
+    <div class="download-box">
+        <span class="icon">📥</span>
+        <div>
+            <h4>Guide PDF : "Débuter avec Linux"</h4>
+            <p>Téléchargez notre guide gratuit (20 pages) pour installer votre première distribution Linux.</p>
+            <a href="#" class="btn-resource">Télécharger le PDF (bientôt disponible)</a>
+        </div>
+    </div>
+</div>
+
+<!-- SECTION TUTORIELS -->
+<div class="resource-section" id="tutoriels">
+    <h2>🛠️ Tutoriels Pratiques</h2>
+
+    <div class="resource-grid">
+        <!-- Tuto Raspberry Pi -->
+        <div class="resource-card" id="tuto-raspberry">
+            <h3><span class="icon">🍓</span> Installer Raspberry Pi OS</h3>
+            <div class="difficulty easy">Débutant - 30 min</div>
+            
+            <ol class="tutorial-steps">
+                <li><strong>Étape 1 :</strong> Téléchargez Raspberry Pi Imager depuis <a href="https://www.raspberrypi.com/software/" target="_blank">raspberrypi.com</a></li>
+                <li><strong>Étape 2 :</strong> Insérez votre carte microSD (min 8 Go)</li>
+                <li><strong>Étape 3 :</strong> Lancez Imager, choisissez "Raspberry Pi OS (64-bit)"</li>
+                <li><strong>Étape 4 :</strong> Cliquez sur "Écrire" et patientez</li>
+                <li><strong>Étape 5 :</strong> Insérez la carte dans le Raspberry Pi et démarrez !</li>
+            </ol>
+
+            <a href="https://www.raspberrypi.com/documentation/" target="_blank" class="btn-resource">Documentation officielle</a>
+        </div>
+
+        <!-- Tuto Mageia -->
+        <div class="resource-card" id="tuto-mageia">
+            <h3><span class="icon">🐧</span> Installer Mageia Linux</h3>
+            <div class="difficulty easy">Débutant - 45 min</div>
+            
+            <ol class="tutorial-steps">
+                <li><strong>Étape 1 :</strong> Téléchargez l'ISO depuis <a href="https://www.mageia.org/fr/downloads/" target="_blank">mageia.org</a></li>
+                <li><strong>Étape 2 :</strong> Créez une clé USB bootable avec <a href="https://rufus.ie/" target="_blank">Rufus</a> (Windows) ou dd (Linux)</li>
+                <li><strong>Étape 3 :</strong> Redémarrez sur la clé USB (touche F12/F2 au démarrage)</li>
+                <li><strong>Étape 4 :</strong> Suivez l'installateur graphique (très simple !)</li>
+                <li><strong>Étape 5 :</strong> Créez votre compte utilisateur et c'est prêt</li>
+            </ol>
+
+            <a href="https://doc.mageia.org/installer/9/fr/content/index.html" target="_blank" class="btn-resource">Guide complet (FR)</a>
+        </div>
+
+        <!-- Tuto Yunohost -->
+        <div class="resource-card" id="tuto-yunohost">
+            <h3><span class="icon">🏠</span> Installer Yunohost</h3>
+            <div class="difficulty medium">Intermédiaire - 1h</div>
+            
+            <ol class="tutorial-steps">
+                <li><strong>Étape 1 :</strong> Achetez un nom de domaine (ex: gandi.net, 15€/an)</li>
+                <li><strong>Étape 2 :</strong> Installez Yunohost sur Raspberry Pi ou serveur VPS</li>
+                <li><strong>Étape 3 :</strong> Configurez le DNS pour pointer vers votre IP</li>
+                <li><strong>Étape 4 :</strong> Suivez la post-installation web</li>
+                <li><strong>Étape 5 :</strong> Installez vos applications (Nextcloud, email...)</li>
+            </ol>
+
+            <a href="https://yunohost.org/fr/install" target="_blank" class="btn-resource">Installer Yunohost</a>
+        </div>
+    </div>
+</div>
+
+<!-- SECTION VIDÉOS -->
+<div class="resource-section" id="videos">
+    <h2>🎥 Vidéos Recommandées</h2>
+    
+    <div class="resource-grid">
+        <div class="resource-card">
+            <h3><span class="icon">🎬</span> Chaînes YouTube françaises</h3>
+            
+            <ul style="list-style: none; padding: 0;">
+                <li style="margin: 1rem 0;">
+                    <strong>🖥️ Le Nouveau Dev</strong><br>
+                    Tutoriels Linux et développement
+                    <br><a href="https://www.youtube.com/@LeNouveauDev" target="_blank">Voir la chaîne</a>
+                </li>
+                <li style="margin: 1rem 0;">
+                    <strong>🐧 Xavki</strong><br>
+                    Linux, DevOps, auto-hébergement
+                    <br><a href="https://www.youtube.com/@xavki" target="_blank">Voir la chaîne</a>
+                </li>
+                <li style="margin: 1rem 0;">
+                    <strong>🔓 Micode</strong><br>
+                    Vie privée et sécurité numérique
+                    <br><a href="https://www.youtube.com/@Micode" target="_blank">Voir la chaîne</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="resource-card">
+            <h3><span class="icon">📺</span> Documentaires</h3>
+            
+            <ul style="list-style: none; padding: 0;">
+                <li style="margin: 1rem 0;">
+                    <strong>Internet ou la Révolution du Partage</strong><br>
+                    <a href="https://www.arte.tv" target="_blank">ARTE</a>
+                </li>
+                <li style="margin: 1rem 0;">
+                    <strong>Nothing to Hide</strong><br>
+                    Sur la surveillance numérique
+                    <br><a href="https://www.nothingtohide.cc" target="_blank">Voir le film</a>
+                </li>
+                <li style="margin: 1rem 0;">
+                    <strong>Coder le Monde</strong><br>
+                    Histoire du code et du libre
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- SECTION COMMUNAUTÉ -->
+<div class="resource-section" id="communaute">
+    <h2>👥 Rejoindre la Communauté</h2>
+    
+    <div class="community-links">
+        <a href="https://framacolibri.org" target="_blank" class="community-card">
+            <div class="icon">💬</div>
+            <h3>Framacolibri</h3>
+            <p>Forum francophone d'entraide</p>
+        </a>
+
+        <a href="https://linuxfr.org" target="_blank" class="community-card">
+            <div class="icon">🇫🇷</div>
+            <h3>LinuxFr</h3>
+            <p>Actualités et discussions</p>
+        </a>
+
+        <a href="https://forum.ubuntu-fr.org" target="_blank" class="community-card">
+            <div class="icon">🐧</div>
+            <h3>Ubuntu-FR</h3>
+            <p>Forum Ubuntu français</p>
+        </a>
+
+        <a href="https://forum.mageia.org/fr/" target="_blank" class="community-card">
+            <div class="icon">⚙️</div>
+            <h3>Forum Mageia</h3>
+            <p>Support Mageia</p>
+        </a>
+    </div>
+</div>
+
+<!-- SECTION FAQ -->
+<div class="resource-section" id="faq">
+    <h2>❓ Questions Fréquentes</h2>
+    
+    <div class="faq-item">
+        <h4>🤔 Linux, c'est compliqué ?</h4>
+        <p><strong>Non !</strong> Les distributions modernes comme Ubuntu ou Mageia sont plus simples que Windows. L'installation prend 20 minutes et tout est graphique.</p>
+    </div>
+
+    <div class="faq-item">
+        <h4>💰 Linux est-il vraiment gratuit ?</h4>
+        <p><strong>Oui, 100% gratuit !</strong> Pas de licence, pas d'abonnement, pas de publicité. Vous ne payez rien, jamais.</p>
+    </div>
+
+    <div class="faq-item">
+        <h4>🎮 Puis-je jouer à des jeux sur Linux ?</h4>
+        <p><strong>Oui !</strong> Steam fonctionne sur Linux avec des milliers de jeux. Proton permet de jouer à la plupart des jeux Windows.</p>
+    </div>
+
+    <div class="faq-item">
+        <h4>📄 Mes documents Office sont-ils compatibles ?</h4>
+        <p><strong>Oui !</strong> LibreOffice ouvre et édite tous les formats Word, Excel, PowerPoint. La compatibilité est excellente.</p>
+    </div>
+
+    <div class="faq-item">
+        <h4>🆘 Où trouver de l'aide si je bloque ?</h4>
+        <p>
+            <strong>Plusieurs options :</strong>
+            <ul style="margin-top: 0.5rem;">
+                <li>• Forums : LinuxFr.org, Ubuntu-FR</li>
+                <li>• Discord/Matrix : communautés francophones actives</li>
+                <li>• Documentation : doc.ubuntu-fr.org, doc.mageia.org</li>
+                <li>• Meetups : événements locaux Linux</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="faq-item">
+        <h4>🍓 Le Raspberry Pi est-il assez puissant ?</h4>
+        <p><strong>Oui pour la bureautique !</strong> Navigation web, LibreOffice, emails, vidéos HD fonctionnent parfaitement. Pas pour les jeux lourds ou montage vidéo 4K.</p>
+    </div>
+
+    <div class="faq-item">
+        <h4>🔒 Linux est-il vraiment plus sûr ?</h4>
+        <p><strong>Oui !</strong> Peu de virus, mises à jour sécurité rapides, pas de bloatware. Le code open source est auditable par tous.</p>
+    </div>
+
+    <div class="faq-item">
+        <h4>♻️ Quel impact écologique pour Linux ?</h4>
+        <p><strong>Très positif !</strong> Linux prolonge la vie des vieux PC, consomme moins de ressources, pas d'obsolescence programmée. Un PC Linux peut durer 10+ ans.</p>
+    </div>
+</div>
+
+<!-- SECTION TÉLÉCHARGEMENTS -->
+<div class="resource-section">
+    <h2>📥 Téléchargements Utiles</h2>
+    
+    <div class="resource-grid">
+        <div class="download-box" style="flex-direction: column; align-items: start;">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <span class="icon">🐧</span>
+                <div>
+                    <h4>Distributions Linux</h4>
+                    <p>Images ISO officielles</p>
+                </div>
+            </div>
+            <div style="margin-top: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                <a href="https://www.mageia.org/fr/downloads/" target="_blank" class="btn-resource">Mageia</a>
+                <a href="https://ubuntu.com/download/desktop" target="_blank" class="btn-resource">Ubuntu</a>
+                <a href="https://getfedora.org/fr/" target="_blank" class="btn-resource">Fedora</a>
+            </div>
+        </div>
+
+        <div class="download-box" style="flex-direction: column; align-items: start;">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <span class="icon">💿</span>
+                <div>
+                    <h4>Outils de création USB</h4>
+                    <p>Pour créer une clé USB bootable</p>
+                </div>
+            </div>
+            <div style="margin-top: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                <a href="https://rufus.ie/" target="_blank" class="btn-resource">Rufus (Windows)</a>
+                <a href="https://etcher.balena.io/" target="_blank" class="btn-resource">Etcher (Multi-OS)</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

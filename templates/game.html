@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}Le Grand Défi - NIRD Quest{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>🎮 Le Grand Défi</h1>
+    <p style="font-size: 1.1rem; color: var(--text-secondary);">
+        Vous allez affronter 5 scénarios critiques. Chaque choix impactera vos scores NIRD !
+    </p>
+    
+    <div class="progress-bar" style="margin-top: 1.5rem;">
+        <div class="progress-fill" id="progress" style="width: 0%;"></div>
+    </div>
+    <p id="progress-text" style="text-align: center; margin-top: 0.5rem; color: var(--text-secondary);">
+        Scénario 1 sur 5
+    </p>
+</div>
+
+<div id="game-container">
+    {% for scenario in scenarios %}
+    <div class="scenario" id="scenario-{{ scenario.id }}" style="{% if scenario.id != 1 %}display: none;{% endif %}">
+        <h2>{{ scenario.title }}</h2>
+        <p style="font-size: 1.1rem; line-height: 1.8; margin: 1.5rem 0;">
+            {{ scenario.question }}
+        </p>
+        
+        <div class="choices">
+            {% for choice in scenario.choices %}
+            <div class="choice-card" data-scenario="{{ scenario.id }}" data-choice="{{ loop.index0 }}" onclick="selectChoice({{ scenario.id }}, {{ loop.index0 }})">
+                <h3 style="color: var(--primary-color); margin-bottom: 0.5rem;">
+                    {{ ['A', 'B', 'C'][loop.index0] }}) {{ choice.text }}
+                </h3>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div id="feedback-{{ scenario.id }}" class="feedback" style="display: none; margin-top: 2rem;">
+            <p id="feedback-text-{{ scenario.id }}" style="font-size: 1.1rem;"></p>
+            
+            {% if scenario.id < scenarios|length %}
+            <button class="btn btn-success" onclick="nextScenario({{ scenario.id }})" style="margin-top: 1rem;">
+                Scénario suivant →
+            </button>
+            {% else %}
+            <button class="btn btn-success" onclick="showResults()" style="margin-top: 1rem;">
+                📊 Voir mes résultats
+            </button>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div id="loading" style="display: none; text-align: center; padding: 3rem;">
+    <div class="loader"></div>
+    <p style="color: var(--text-secondary); margin-top: 1rem;">Traitement de vos choix...</p>
+</div>
+
+<script>
+let currentScenario = 1;
+const totalScenarios = {{ scenarios|length }};
+let selectedChoices = {};
+
+function selectChoice(scenarioId, choiceIndex) {
+    // Désélectionner tous les choix du scénario
+    const allChoices = document.querySelectorAll(`[data-scenario="${scenarioId}"]`);
+    allChoices.forEach(card => card.classList.remove('selected'));
+    
+    // Sélectionner le choix cliqué
+    const selectedCard = document.querySelector(`[data-scenario="${scenarioId}"][data-choice="${choiceIndex}"]`);
+    selectedCard.classList.add('selected');
+    
+    // Sauvegarder le choix
+    selectedChoices[scenarioId] = choiceIndex;
+    
+    // Envoyer au serveur
+    fetch('/api/submit_choice', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            scenario_id: scenarioId,
+            choice_index: choiceIndex
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Afficher le feedback
+            const feedbackDiv = document.getElementById(`feedback-${scenarioId}`);
+            const feedbackText = document.getElementById(`feedback-text-${scenarioId}`);
+            feedbackText.innerHTML = data.feedback;
+            feedbackDiv.style.display = 'block';
+            
+            // Déterminer si positif ou négatif
+            if (data.feedback.includes('✅')) {
+                feedbackDiv.className = 'feedback positive';
+            } else if (data.feedback.includes('❌')) {
+                feedbackDiv.className = 'feedback negative';
+            } else {
+                feedbackDiv.className = 'feedback';
+            }
+            
+            // Scroll vers le feedback
+            feedbackDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    })
+    .catch(error => {
+        console.error('Erreur:', error);
+        showToast('Erreur lors de l\'enregistrement du choix', 'error');
+    });
+}
+
+function nextScenario(currentId) {
+    // Masquer le scénario actuel
+    document.getElementById(`scenario-${currentId}`).style.display = 'none';
+    
+    // Afficher le suivant
+    const nextId = currentId + 1;
+    document.getElementById(`scenario-${nextId}`).style.display = 'block';
+    
+    // Mettre à jour la progression
+    currentScenario = nextId;
+    updateProgress();
+    
+    // Scroll en haut
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateProgress() {
+    const progress = (currentScenario / totalScenarios) * 100;
+    document.getElementById('progress').style.width = progress + '%';
+    document.getElementById('progress-text').textContent = `Scénario ${currentScenario} sur ${totalScenarios}`;
+}
+
+function showResults() {
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('game-container').style.display = 'none';
+    
+    // Redirection vers les résultats après 1 seconde
+    setTimeout(() => {
+        window.location.href = '/results';
+    }, 1000);
+}
+
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = `
+        <strong>${type === 'error' ? '❌' : '✅'}</strong> ${message}
+    `;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.style.animation = 'slideInRight 0.3s ease-out reverse';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+// Animation d'entrée
+document.addEventListener('DOMContentLoaded', () => {
+    const scenarios = document.querySelectorAll('.scenario');
+    scenarios.forEach((scenario, index) => {
+        if (index === 0) {
+            scenario.style.animation = 'fadeInUp 0.6s ease-out';
+        }
+    });
+});
+</script>
+{% endblock %}

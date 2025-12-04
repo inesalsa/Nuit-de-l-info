@@ -1,0 +1,443 @@
+{% extends "base.html" %}
+
+{% block title %}La Quête du Serveur Sacré - NIRD Quest{% endblock %}
+
+{% block extra_css %}
+<style>
+.quest-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.zone-card {
+    background: var(--bg-card);
+    border: 3px solid var(--primary-color);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    margin: 2rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.zone-card.locked {
+    opacity: 0.5;
+    pointer-events: none;
+    border-color: var(--text-secondary);
+}
+
+.zone-card.completed {
+    border-color: var(--accent-color);
+    background: rgba(80, 200, 120, 0.1);
+}
+
+.artifact {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, var(--accent-color), #3CB371);
+    border-radius: 20px;
+    margin: 0.5rem;
+    font-weight: 600;
+    animation: pulse 2s infinite;
+}
+
+.puzzle-area {
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    padding: 2rem;
+    margin: 2rem 0;
+}
+
+.choice-option {
+    background: var(--bg-card);
+    border: 2px solid var(--primary-color);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.choice-option:hover {
+    transform: translateX(10px);
+    border-color: var(--accent-color);
+    box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
+}
+
+.choice-option.selected {
+    border-color: var(--accent-color);
+    background: rgba(80, 200, 120, 0.1);
+}
+
+.choice-option.wrong {
+    border-color: var(--danger-color);
+    background: rgba(231, 76, 60, 0.1);
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+
+.drag-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.draggable-item {
+    background: var(--bg-card);
+    border: 2px solid var(--primary-color);
+    border-radius: 10px;
+    padding: 1.5rem;
+    text-align: center;
+    cursor: move;
+    transition: all 0.3s;
+}
+
+.draggable-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(74, 144, 226, 0.4);
+}
+
+.draggable-item.dragging {
+    opacity: 0.5;
+}
+
+.drop-zone {
+    min-height: 150px;
+    border: 3px dashed var(--primary-color);
+    border-radius: 10px;
+    padding: 2rem;
+    margin: 1rem 0;
+    background: rgba(74, 144, 226, 0.05);
+    transition: all 0.3s;
+}
+
+.drop-zone.over {
+    background: rgba(80, 200, 120, 0.2);
+    border-color: var(--accent-color);
+}
+
+.inventory {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--bg-card);
+    border: 2px solid var(--accent-color);
+    border-radius: 15px;
+    padding: 1rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    z-index: 100;
+}
+
+.inventory-item {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    margin: 0.25rem;
+    background: var(--bg-secondary);
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.server-animation {
+    text-align: center;
+    padding: 3rem;
+}
+
+.server-parts {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.server-part {
+    width: 100px;
+    height: 100px;
+    border: 3px solid var(--accent-color);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    background: var(--bg-card);
+    animation: float 3s ease-in-out infinite;
+}
+
+.server-part:nth-child(2) {
+    animation-delay: 0.5s;
+}
+
+.server-part:nth-child(3) {
+    animation-delay: 1s;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.zone-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.progress-tracker {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.progress-step {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--bg-secondary);
+    border: 3px solid var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.progress-step.active {
+    border-color: var(--primary-color);
+    background: var(--primary-color);
+}
+
+.progress-step.completed {
+    border-color: var(--accent-color);
+    background: var(--accent-color);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="quest-container">
+    <div class="card">
+        <h1>🏰 La Quête du Serveur Sacré</h1>
+        <p style="font-size: 1.2rem; line-height: 1.8;">
+            Le <strong>Serveur Sacré</strong> a été volé par l'Empire Numérico !
+            Explore 3 zones, résous des énigmes et récupère les artefacts pour le restaurer.
+        </p>
+        
+        <div class="progress-tracker">
+            <div class="progress-step" id="step-1">1</div>
+            <div class="progress-step" id="step-2">2</div>
+            <div class="progress-step" id="step-3">3</div>
+        </div>
+    </div>
+
+    <!-- Zone 1: Forêt des Logiciels Libres -->
+    <div class="zone-card" id="zone-1">
+        <span class="zone-icon">🌲</span>
+        <h2>Zone 1 : La Forêt des Logiciels Libres</h2>
+        <p style="font-size: 1.1rem; line-height: 1.8;">
+            Luma t'accueille dans une forêt mystique où poussent des arbres-icônes open source.
+            Pour avancer, tu dois choisir le bon chemin vers l'autonomie numérique...
+        </p>
+        
+        <div class="puzzle-area" id="puzzle-1">
+            <h3>🛤️ Quel chemin emprunter ?</h3>
+            <p>Choisis la combinaison d'outils qui garantit l'autonomie du village :</p>
+            
+            <div class="choice-option" onclick="selectPath(1, 'A')">
+                <strong>Chemin A :</strong> Office 365 + Microsoft Teams + OneDrive
+                <br><small>Solution propriétaire tout-en-un</small>
+            </div>
+            
+            <div class="choice-option" onclick="selectPath(1, 'B')">
+                <strong>Chemin B :</strong> Google Workspace
+                <br><small>Suite collaborative dans le cloud</small>
+            </div>
+            
+            <div class="choice-option" onclick="selectPath(1, 'C')">
+                <strong>Chemin C :</strong> LibreOffice + Nextcloud + Moodle
+                <br><small>Outils libres et auto-hébergés</small>
+            </div>
+        </div>
+        
+        <div id="feedback-1" style="display: none; margin-top: 2rem;"></div>
+        <button id="btn-zone-1" class="btn btn-success" onclick="completeZone(1)" style="display: none;">
+            Continuer vers Zone 2 →
+        </button>
+    </div>
+
+    <!-- Zone 2: Décharge des Machines Fatiguées -->
+    <div class="zone-card locked" id="zone-2">
+        <span class="zone-icon">♻️</span>
+        <h2>Zone 2 : La Décharge des Machines Fatiguées</h2>
+        <p style="font-size: 1.1rem; line-height: 1.8;">
+            Des vieux PC jonchent le sol. Les Numérins te supplient : "Ne nous jetez pas ! On peut encore servir !"
+            Aide-les à réparer un ordinateur abandonné...
+        </p>
+        
+        <div class="puzzle-area" id="puzzle-2" style="display: none;">
+            <h3>🔧 Que faut-il pour reconditionner un vieux PC ?</h3>
+            <p>Glisse les bons outils dans la zone de réparation :</p>
+            
+            <div class="drag-container">
+                <div class="draggable-item" draggable="true" data-item="tournevis">
+                    🔧<br>Tournevis
+                </div>
+                <div class="draggable-item" draggable="true" data-item="spray">
+                    💨<br>Air sec
+                </div>
+                <div class="draggable-item" draggable="true" data-item="ssd">
+                    💾<br>SSD
+                </div>
+                <div class="draggable-item" draggable="true" data-item="poubelle">
+                    🗑️<br>Poubelle
+                </div>
+            </div>
+            
+            <div class="drop-zone" id="repair-zone">
+                <p style="text-align: center; color: var(--text-secondary);">
+                    Glisse les outils nécessaires ici<br>
+                    <small>(3 outils sur 4 sont corrects)</small>
+                </p>
+            </div>
+            
+            <button class="btn" onclick="checkRepair()">✅ Vérifier la réparation</button>
+        </div>
+        
+        <div id="feedback-2" style="display: none; margin-top: 2rem;"></div>
+        <button id="btn-zone-2" class="btn btn-success" onclick="completeZone(2)" style="display: none;">
+            Continuer vers Zone 3 →
+        </button>
+    </div>
+
+    <!-- Zone 3: Tour du Cloud Obscur -->
+    <div class="zone-card locked" id="zone-3">
+        <span class="zone-icon">🏰</span>
+        <h2>Zone 3 : La Tour du Cloud Obscur</h2>
+        <p style="font-size: 1.1rem; line-height: 1.8;">
+            Une tour sombre aspire les données du village vers l'étranger.
+            Pour libérer le Serveur Sacré, choisis la bonne stratégie de souveraineté...
+        </p>
+        
+        <div class="puzzle-area" id="puzzle-3" style="display: none;">
+            <h3>☁️ Comment protéger les données du village ?</h3>
+            <p>Sélectionne les <strong>2 meilleures solutions</strong> compatibles NIRD :</p>
+            
+            <div class="choice-option" data-option="1" onclick="toggleOption(1)">
+                <strong>Option 1 :</strong> Serveur cloud européen (RGPD)
+                <br><small>Hébergement en France/UE avec protection des données</small>
+            </div>
+            
+            <div class="choice-option" data-option="2" onclick="toggleOption(2)">
+                <strong>Option 2 :</strong> Cloud américain (AWS, Azure, GCP)
+                <br><small>Infrastructure massive et performante</small>
+            </div>
+            
+            <div class="choice-option" data-option="3" onclick="toggleOption(3)">
+                <strong>Option 3 :</strong> Cloud chinois
+                <br><small>Alternative aux géants américains</small>
+            </div>
+            
+            <div class="choice-option" data-option="4" onclick="toggleOption(4)">
+                <strong>Option 4 :</strong> Auto-hébergement + chiffrement
+                <br><small>Serveur local avec maîtrise totale</small>
+            </div>
+            
+            <p style="margin-top: 1.5rem; text-align: center; color: var(--text-secondary);">
+                <span id="selection-count">0</span> / 2 options sélectionnées
+            </p>
+            
+            <button class="btn" onclick="checkSovereignty()">✅ Valider mes choix</button>
+        </div>
+        
+        <div id="feedback-3" style="display: none; margin-top: 2rem;"></div>
+        <button id="btn-zone-3" class="btn btn-success" onclick="showVictory()" style="display: none;">
+            Restaurer le Serveur Sacré ! 🎉
+        </button>
+    </div>
+
+    <!-- Écran de victoire -->
+    <div class="card" id="victory-screen" style="display: none; text-align: center;">
+        <h1>🎉 VICTOIRE ! 🎉</h1>
+        
+        <div class="server-animation">
+            <h2>Le Serveur Sacré est restauré !</h2>
+            
+            <div class="server-parts">
+                <div class="server-part">🔓</div>
+                <div class="server-part">♻️</div>
+                <div class="server-part">🌍</div>
+            </div>
+            
+            <svg width="300" height="200" viewBox="0 0 300 200" style="margin: 2rem 0;">
+                <!-- Serveur restauré -->
+                <rect x="100" y="50" width="100" height="120" fill="#50C878" rx="10"/>
+                <rect x="110" y="65" width="80" height="15" fill="#4A90E2" rx="3"/>
+                <rect x="110" y="90" width="80" height="15" fill="#4A90E2" rx="3"/>
+                <rect x="110" y="115" width="80" height="15" fill="#4A90E2" rx="3"/>
+                <circle cx="120" cy="150" r="5" fill="#FFD700"/>
+                <circle cx="135" cy="150" r="5" fill="#FFD700"/>
+                <circle cx="150" cy="150" r="5" fill="#FFD700"/>
+                
+                <!-- Étoiles de succès -->
+                <circle cx="50" cy="50" r="15" fill="#FFD700" opacity="0.8"/>
+                <circle cx="250" cy="50" r="15" fill="#FFD700" opacity="0.8"/>
+                <circle cx="50" cy="150" r="12" fill="#FFD700" opacity="0.6"/>
+                <circle cx="250" cy="150" r="12" fill="#FFD700" opacity="0.6"/>
+            </svg>
+        </div>
+        
+        <div style="background: rgba(80, 200, 120, 0.1); padding: 2rem; border-radius: 15px; border-left: 5px solid var(--accent-color);">
+            <h3>🧙 Message de Maître Récupix</h3>
+            <p style="font-size: 1.1rem; line-height: 1.8; font-style: italic;">
+                "Jeune protecteur, tu as accompli l'impossible !
+                Grâce à toi, le Village Numérique Résilient retrouve son autonomie.
+                Le Serveur Sacré pulse à nouveau, les données sont protégées,
+                et l'Empire Numérico recule... pour un temps."
+            </p>
+        </div>
+        
+        <div class="scores-container" style="margin: 2rem 0;">
+            <div class="score-item score-positive">
+                <span class="score-value">+10%</span>
+                <span class="score-label">Autonomie</span>
+            </div>
+            <div class="score-item score-positive">
+                <span class="score-value">+10%</span>
+                <span class="score-label">Durabilité</span>
+            </div>
+            <div class="score-item">
+                <span class="artifact">🎖️ Badge<br>Protecteur</span>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem;">
+            <a href="/game" class="btn btn-success" style="font-size: 1.2rem; padding: 1.2rem 2.5rem;">
+                Retour au jeu principal
+            </a>
+            <button class="btn btn-secondary" onclick="location.reload()" style="margin-left: 1rem;">
+                🔄 Rejouer la quête
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Inventaire flottant -->
+<div class="inventory" id="inventory">
+    <strong style="display: block; margin-bottom: 0.5rem; text-align: center;">Artefacts</strong>
+    <div id="artifact-slots">
+        <div class="inventory-item" id="artifact-1" style="opacity: 0.3;" title="Talisman du Logiciel Libre">🔓</div>
+        <div class="inventory-item" id="artifact-2" style="opacity: 0.3;" title="Cœur du Reconditionnement">♻️</div>
+        <div class="inventory-item" id="artifact-3" style="opacity: 0.3;" title="Clé de la Souveraineté">🌍</div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/quest/quest.js') }}"></script>
+{% endblock %}

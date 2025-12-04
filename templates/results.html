@@ -1,0 +1,249 @@
+{% extends "base.html" %}
+
+{% block title %}Résultats - NIRD Quest{% endblock %}
+
+{% block content %}
+<div class="card" style="text-align: center;">
+    <h1>📊 Vos Résultats</h1>
+    <h2 style="color: var(--accent-color); margin-top: 1rem;">{{ message }}</h2>
+    
+    <div style="margin: 3rem 0;">
+        <div style="font-size: 4rem; font-weight: bold; background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+            {{ total }}
+        </div>
+        <div style="color: var(--text-secondary); font-size: 1.2rem;">
+            points NIRD sur 75 possibles
+        </div>
+    </div>
+    
+    {% if level == 'expert' %}
+    <div style="font-size: 3rem; margin: 2rem 0;">🌟✨🏆✨🌟</div>
+    {% elif level == 'avance' %}
+    <div style="font-size: 3rem; margin: 2rem 0;">👍💪🎉</div>
+    {% elif level == 'debutant' %}
+    <div style="font-size: 3rem; margin: 2rem 0;">🌱📚💡</div>
+    {% else %}
+    <div style="font-size: 3rem; margin: 2rem 0;">⚠️🚨📉</div>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h2>📈 Détail de vos scores</h2>
+    <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+        Voici comment vous vous en êtes sorti sur les 5 piliers NIRD :
+    </p>
+    
+    <div class="scores-container">
+        <div class="score-item {% if scores.durabilite > 0 %}score-positive{% elif scores.durabilite < 0 %}score-negative{% endif %}">
+            <span class="solution-icon">♻️</span>
+            <span class="score-value">{{ scores.durabilite }}</span>
+            <span class="score-label">Durabilité</span>
+            <p style="margin-top: 1rem; font-size: 0.9rem;">
+                {% if scores.durabilite >= 10 %}
+                Excellent ! Vous privilégiez le réemploi.
+                {% elif scores.durabilite >= 5 %}
+                Bien ! Vous pensez au cycle de vie.
+                {% elif scores.durabilite >= 0 %}
+                À améliorer. Pensez reconditionnement !
+                {% else %}
+                Attention ! Trop de gaspillage.
+                {% endif %}
+            </p>
+        </div>
+        
+        <div class="score-item {% if scores.autonomie > 0 %}score-positive{% elif scores.autonomie < 0 %}score-negative{% endif %}">
+            <span class="solution-icon">🔓</span>
+            <span class="score-value">{{ scores.autonomie }}</span>
+            <span class="score-label">Autonomie</span>
+            <p style="margin-top: 1rem; font-size: 0.9rem;">
+                {% if scores.autonomie >= 10 %}
+                Parfait ! Vous maîtrisez vos outils.
+                {% elif scores.autonomie >= 5 %}
+                Bien ! Vous cherchez l'indépendance.
+                {% elif scores.autonomie >= 0 %}
+                Attention à la dépendance.
+                {% else %}
+                Danger ! Trop de dépendances.
+                {% endif %}
+            </p>
+        </div>
+        
+        <div class="score-item {% if scores.sobriete > 0 %}score-positive{% elif scores.sobriete < 0 %}score-negative{% endif %}">
+            <span class="solution-icon">🌱</span>
+            <span class="score-value">{{ scores.sobriete }}</span>
+            <span class="score-label">Sobriété</span>
+            <p style="margin-top: 1rem; font-size: 0.9rem;">
+                {% if scores.sobriete >= 10 %}
+                Top ! Consommation raisonnée.
+                {% elif scores.sobriete >= 5 %}
+                Bien ! Vous optimisez.
+                {% elif scores.sobriete >= 0 %}
+                Peut mieux faire.
+                {% else %}
+                Trop de gaspillage.
+                {% endif %}
+            </p>
+        </div>
+        
+        <div class="score-item {% if scores.souverainete > 0 %}score-positive{% elif scores.souverainete < 0 %}score-negative{% endif %}">
+            <span class="solution-icon">🌍</span>
+            <span class="score-value">{{ scores.souverainete }}</span>
+            <span class="score-label">Souveraineté</span>
+            <p style="margin-top: 1rem; font-size: 0.9rem;">
+                {% if scores.souverainete >= 10 %}
+                Bravo ! Données maîtrisées.
+                {% elif scores.souverainete >= 5 %}
+                Correct. Vigilance données.
+                {% elif scores.souverainete >= 0 %}
+                Attention RGPD.
+                {% else %}
+                Danger ! Données exposées.
+                {% endif %}
+            </p>
+        </div>
+        
+        <div class="score-item {% if scores.inclusion > 0 %}score-positive{% elif scores.inclusion < 0 %}score-negative{% endif %}">
+            <span class="solution-icon">🤝</span>
+            <span class="score-value">{{ scores.inclusion }}</span>
+            <span class="score-label">Inclusion</span>
+            <p style="margin-top: 1rem; font-size: 0.9rem;">
+                {% if scores.inclusion >= 10 %}
+                Parfait ! Accessible à tous.
+                {% elif scores.inclusion >= 5 %}
+                Bien ! Vous pensez collectif.
+                {% elif scores.inclusion >= 0 %}
+                Améliorez l'accessibilité.
+                {% else %}
+                Trop d'exclusion.
+                {% endif %}
+            </p>
+        </div>
+    </div>
+</div>
+
+{% if level == 'expert' %}
+<div class="card" style="background: rgba(80, 200, 120, 0.1); border-color: var(--accent-color);">
+    <h2>🌟 Village Sauvé !</h2>
+    <div style="text-align: center; padding: 2rem;">
+        <svg width="300" height="200" viewBox="0 0 300 200" style="max-width: 100%;">
+            <!-- Village florissant -->
+            <rect x="50" y="120" width="60" height="60" fill="#50C878" rx="5"/>
+            <polygon points="80,120 50,90 110,90" fill="#4A90E2"/>
+            <rect x="60" y="150" width="15" height="25" fill="#FFD700"/>
+            
+            <rect x="130" y="130" width="50" height="50" fill="#50C878" rx="5"/>
+            <polygon points="155,130 130,105 180,105" fill="#4A90E2"/>
+            
+            <rect x="200" y="125" width="55" height="55" fill="#50C878" rx="5"/>
+            <polygon points="227,125 200,95 255,95" fill="#4A90E2"/>
+            
+            <!-- Étoiles de réussite -->
+            <circle cx="80" cy="70" r="10" fill="#FFD700"/>
+            <circle cx="155" cy="75" r="12" fill="#FFD700"/>
+            <circle cx="227" cy="70" r="10" fill="#FFD700"/>
+            
+            <!-- Arbres -->
+            <rect x="20" y="150" width="10" height="30" fill="#7B68EE"/>
+            <circle cx="25" cy="145" r="15" fill="#50C878"/>
+            
+            <rect x="270" y="155" width="10" height="25" fill="#7B68EE"/>
+            <circle cx="275" cy="150" r="12" fill="#50C878"/>
+        </svg>
+        <p style="font-size: 1.2rem; margin-top: 2rem; line-height: 1.8;">
+            Grâce à vous, le Village Numérique Résilient prospère ! Linux tourne sur tous les PC,
+            les données sont sécurisées en Europe, le matériel est reconditionné et le budget optimisé.
+            L'Empire Numérico a été repoussé ! 🎉
+        </p>
+    </div>
+</div>
+{% elif level == 'avance' %}
+<div class="card" style="background: rgba(74, 144, 226, 0.1); border-color: var(--primary-color);">
+    <h2>👍 Village Protégé</h2>
+    <p style="font-size: 1.1rem; line-height: 1.8;">
+        Vous avez fait de bons choix ! Le village tient bon face à l'Empire Numérico.
+        Continuez sur cette voie et explorez les solutions NIRD pour aller encore plus loin.
+    </p>
+</div>
+{% elif level == 'debutant' %}
+<div class="card" style="background: rgba(243, 156, 18, 0.1); border-color: var(--warning-color);">
+    <h2>💪 Village en Transition</h2>
+    <p style="font-size: 1.1rem; line-height: 1.8;">
+        Vous avez fait quelques bons choix, mais le village reste vulnérable.
+        Découvrez les solutions NIRD pour renforcer votre autonomie numérique !
+    </p>
+</div>
+{% else %}
+<div class="card" style="background: rgba(231, 76, 60, 0.1); border-color: var(--danger-color);">
+    <h2>⚠️ Village en Danger !</h2>
+    <p style="font-size: 1.1rem; line-height: 1.8;">
+        Attention ! Vos choix ont affaibli le village. L'Empire Numérico prend le contrôle.
+        Il est urgent de découvrir les alternatives NIRD pour reprendre votre autonomie !
+    </p>
+</div>
+{% endif %}
+
+<div class="card" style="text-align: center;">
+    <h2>🚀 Et maintenant ?</h2>
+    <p style="font-size: 1.1rem; margin: 2rem 0;">
+        Découvrez comment améliorer concrètement votre score NIRD
+    </p>
+    
+    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem;">
+        <a href="/solutions" class="btn btn-success">
+            💡 Découvrir les solutions
+        </a>
+        <a href="/assistant" class="btn btn-primary">
+            🤖 Plan d'action personnalisé
+        </a>
+        <a href="/game" class="btn btn-secondary">
+            🔄 Rejouer
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <h2>📢 Partagez vos résultats</h2>
+    <p style="text-align: center; margin: 1.5rem 0;">
+        Score NIRD : <strong style="color: var(--accent-color); font-size: 1.5rem;">{{ total }}/75</strong>
+    </p>
+    <div style="text-align: center; padding: 1.5rem; background: var(--bg-secondary); border-radius: 10px;">
+        <p style="font-family: monospace; font-size: 0.9rem; color: var(--text-secondary);">
+            ♻️ Durabilité: {{ scores.durabilite }} | 🔓 Autonomie: {{ scores.autonomie }} | 🌱 Sobriété: {{ scores.sobriete }}
+            <br>
+            🌍 Souveraineté: {{ scores.souverainete }} | 🤝 Inclusion: {{ scores.inclusion }}
+        </p>
+        <button class="btn" onclick="copyResults()" style="margin-top: 1rem;">
+            📋 Copier mes résultats
+        </button>
+    </div>
+</div>
+
+<script>
+function copyResults() {
+    const text = `Mon score NIRD Quest : {{ total }}/75
+♻️ Durabilité: {{ scores.durabilite }}
+🔓 Autonomie: {{ scores.autonomie }}
+🌱 Sobriété: {{ scores.sobriete }}
+🌍 Souveraineté: {{ scores.souverainete }}
+🤝 Inclusion: {{ scores.inclusion }}
+
+Testez-vous sur NIRD Quest !`;
+
+    navigator.clipboard.writeText(text).then(() => {
+        showToast('Résultats copiés !', 'success');
+    });
+}
+
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = `<strong>✅</strong> ${message}`;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.style.animation = 'slideInRight 0.3s ease-out reverse';
+        setTimeout(() => toast.remove(), 300);
+    }, 2000);
+}
+</script>
+{% endblock %}

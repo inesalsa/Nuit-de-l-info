@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}NIRD Quest - Accueil{% endblock %}
+
+{% block content %}
+<div class="hero shine">
+    <h1>🌟 NIRD Quest</h1>
+    <h2>Le Village Numérique Résilient</h2>
+    <p>
+        Dans un monde dominé par les géants du numérique, un village résiste...
+        <br>
+        Devenez le protecteur de l'école face à l'Empire Numérico !
+    </p>
+    
+    <div style="margin: 2rem 0;">
+        <svg width="300" height="200" viewBox="0 0 300 200" style="max-width: 100%;">
+            <!-- Village simplifié -->
+            <rect x="50" y="120" width="60" height="60" fill="#4A90E2" rx="5"/>
+            <polygon points="80,120 50,90 110,90" fill="#7B68EE"/>
+            <rect x="60" y="150" width="15" height="25" fill="#50C878"/>
+            <rect x="75" y="135" width="20" height="15" fill="#F39C12"/>
+            
+            <rect x="130" y="130" width="50" height="50" fill="#4A90E2" rx="5"/>
+            <polygon points="155,130 130,105 180,105" fill="#7B68EE"/>
+            <rect x="140" y="155" width="12" height="20" fill="#50C878"/>
+            
+            <rect x="200" y="125" width="55" height="55" fill="#4A90E2" rx="5"/>
+            <polygon points="227,125 200,95 255,95" fill="#7B68EE"/>
+            <rect x="210" y="150" width="15" height="25" fill="#50C878"/>
+            
+            <!-- Étoiles -->
+            <circle cx="30" cy="30" r="2" fill="#FFD700"/>
+            <circle cx="80" cy="20" r="1.5" fill="#FFD700"/>
+            <circle cx="150" cy="25" r="2" fill="#FFD700"/>
+            <circle cx="220" cy="35" r="1.5" fill="#FFD700"/>
+            <circle cx="270" cy="20" r="2" fill="#FFD700"/>
+        </svg>
+    </div>
+    
+    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="/story" class="btn btn-success">🚀 Commencer l'aventure</a>
+        <a href="/solutions" class="btn btn-secondary">💡 Découvrir NIRD</a>
+    </div>
+</div>
+
+<div class="card">
+    <h2>🎯 Qu'est-ce que NIRD ?</h2>
+    <p style="font-size: 1.1rem; line-height: 1.8;">
+        <strong>NIRD</strong> signifie <strong>Numérique Inclusif, Responsable et Durable</strong>.
+        C'est une démarche pour reprendre le contrôle de notre numérique dans les établissements scolaires.
+    </p>
+    
+    <div class="scores-container" style="margin-top: 2rem;">
+        <div class="score-item">
+            <span class="solution-icon">♻️</span>
+            <h3>Durabilité</h3>
+            <p>Réemploi, reconditionnement, lutte contre l'obsolescence</p>
+        </div>
+        
+        <div class="score-item">
+            <span class="solution-icon">🔓</span>
+            <h3>Autonomie</h3>
+            <p>Logiciels libres, Linux, indépendance technologique</p>
+        </div>
+        
+        <div class="score-item">
+            <span class="solution-icon">🌍</span>
+            <h3>Souveraineté</h3>
+            <p>Données en Europe, hébergement maîtrisé, RGPD</p>
+        </div>
+        
+        <div class="score-item">
+            <span class="solution-icon">🌱</span>
+            <h3>Sobriété</h3>
+            <p>Consommation raisonnée, optimisation des ressources</p>
+        </div>
+        
+        <div class="score-item">
+            <span class="solution-icon">🤝</span>
+            <h3>Inclusion</h3>
+            <p>Accessibilité, formation, communs numériques</p>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>🎮 Comment ça marche ?</h2>
+    <div style="display: grid; gap: 1.5rem; margin-top: 1.5rem;">
+        <div style="display: flex; gap: 1rem; align-items: start;">
+            <span style="font-size: 2rem;">1️⃣</span>
+            <div>
+                <h3>Découvrez l'histoire</h3>
+                <p>Plongez dans l'univers du Village Numérique Résilient et découvrez les menaces de l'Empire Numérico.</p>
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 1rem; align-items: start;">
+            <span style="font-size: 2rem;">2️⃣</span>
+            <div>
+                <h3>Faites vos choix</h3>
+                <p>5 scénarios réalistes vous attendent : matériel, logiciels, données, budget... Chaque décision compte !</p>
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 1rem; align-items: start;">
+            <span style="font-size: 2rem;">3️⃣</span>
+            <div>
+                <h3>Obtenez votre bilan</h3>
+                <p>Découvrez vos scores en durabilité, autonomie, sobriété, souveraineté et inclusion.</p>
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 1rem; align-items: start;">
+            <span style="font-size: 2rem;">4️⃣</span>
+            <div>
+                <h3>Passez à l'action</h3>
+                <p>L'assistant IA vous génère un plan d'action personnalisé pour votre établissement.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div style="text-align: center; margin-top: 2rem;">
+        <a href="/game" class="btn btn-success" style="font-size: 1.2rem; padding: 1.2rem 2.5rem;">
+            🎮 Jouer maintenant
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <h2>🌟 Pourquoi c'est important ?</h2>
+    <p style="font-size: 1.1rem; line-height: 1.8;">
+        Les établissements scolaires dépensent des millions en abonnements, renouvellent du matériel trop souvent,
+        et perdent la maîtrise de leurs données. <strong>Il existe des alternatives !</strong>
+    </p>
+    
+    <div style="background: rgba(231, 76, 60, 0.1); border-left: 5px solid #E74C3C; padding: 1.5rem; border-radius: 10px; margin: 1.5rem 0;">
+        <h3 style="color: #E74C3C;">⚠️ Les risques actuels</h3>
+        <ul style="margin-left: 2rem; margin-top: 1rem;">
+            <li>Dépendance aux Big Tech (Microsoft, Google, Apple...)</li>
+            <li>Obsolescence programmée et gaspillage électronique</li>
+            <li>Données stockées hors Europe (Cloud Act américain)</li>
+            <li>Abonnements coûteux et perpétuels</li>
+            <li>Verrouillage technologique et perte d'autonomie</li>
+        </ul>
+    </div>
+    
+    <div style="background: rgba(80, 200, 120, 0.1); border-left: 5px solid #50C878; padding: 1.5rem; border-radius: 10px;">
+        <h3 style="color: #50C878;">✅ Les solutions NIRD</h3>
+        <ul style="margin-left: 2rem; margin-top: 1rem;">
+            <li>Linux et logiciels libres (gratuits et pérennes)</li>
+            <li>Réemploi et reconditionnement (économies + écologie)</li>
+            <li>Hébergement souverain en Europe (RGPD)</li>
+            <li>Mutualisation et communs numériques</li>
+            <li>Formation et autonomie des équipes</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
