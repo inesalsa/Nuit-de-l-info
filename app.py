@@ -194,50 +194,18 @@ def game():
 @app.route("/api/submit_choice", methods=['POST'])
 def submit_choice():
     """Enregistre un choix et met à jour le score"""
-    try:
-        data = request.json
-        scenario_id = data.get('scenario_id')
-        choice_index = data.get('choice_index')
-        
-        if 'scores' not in session:
-            session['scores'] = {
-                "durabilite": 0,
-                "autonomie": 0,
-                "sobriete": 0,
-                "souverainete": 0,
-                "inclusion": 0
-            }
-        
-        # Trouver le scénario correspondant
-        scenario = next((s for s in SCENARIOS if s['id'] == scenario_id), None)
-        if not scenario:
-            return jsonify({"success": False, "error": "Scenario not found"}), 404
-        
-        # Vérifier que l'index est valide
-        if choice_index < 0 or choice_index >= len(scenario['choices']):
-            return jsonify({"success": False, "error": "Invalid choice"}), 400
-        
-        # Récupérer le choix
-        choice = scenario['choices'][choice_index]
-        
-        # Mettre à jour les scores
-        for key, value in choice['scores'].items():
-            session['scores'][key] += value
-        
-        session.modified = True
-        
-        logger.info(f"Choix enregistré - Scenario {scenario_id}, Choice {choice_index}")
-        logger.info(f"Scores actuels: {session['scores']}")
-        
-        return jsonify({
-            "success": True,
-            "feedback": choice['feedback'],
-            "scores": session['scores']
-        })
+    data = request.json
+    scenario_id = data.get('scenario_id')
+    choice_index = data.get('choice_index')
     
-    except Exception as e:
-        logger.error(f"Erreur submit_choice: {e}")
-        return jsonify({"success": False, "error": str(e)}), 500
+    if 'scores' not in session:
+        session['scores'] = {
+            "durabilite": 0,
+            "autonomie": 0,
+            "sobriete": 0,
+            "souverainete": 0,
+            "inclusion": 0
+        }
 
 
 @app.route("/results")
@@ -370,6 +338,11 @@ def settings():
 def benevolat():
     return render_template('benevolat.html')
 
+@app.route("/posture")
+def posture():
+    """Défi Decathlon : Santé Posturale"""
+    return render_template("posture.html")
+
 @app.route("/license")
 def license_page():
     """Page licence"""
@@ -403,11 +376,11 @@ CONTEXTE UTILISATEUR:
 - Expérience: {user_profile.get('experience', 'débutant')}
 
 PRINCIPES NIRD À RESPECTER:
-1. SOUVERAINETÉ: Privilégier les solutions européennes (Mageia, Yunohost, Framasoft, OVH, Scaleway)
-2. DURABILITÉ: Encourager le reconditionné, Raspberry Pi, réutilisation du matériel
-3. LOGICIEL LIBRE: Promouvoir Linux, LibreOffice, Nextcloud, Firefox
-4. ACCESSIBILITÉ: Solutions économiques pour tous (Raspberry Pi < 50€, reconditionnement)
-5. VIE PRIVÉE: RGPD, hébergement EU, chiffrement
+1. 🇫🇷 SOUVERAINETÉ: Privilégier les solutions françaises/européennes (Mageia, Yunohost, Framasoft, OVH, Scaleway)
+2. ♻️ DURABILITÉ: Encourager le reconditionné, Raspberry Pi, réutilisation du matériel
+3. 🔓 LOGICIEL LIBRE: Promouvoir Linux, LibreOffice, Nextcloud, Firefox
+4. 💰 ACCESSIBILITÉ: Solutions économiques pour tous (Raspberry Pi < 50€, reconditionnement)
+5. 🔒 VIE PRIVÉE: RGPD, hébergement EU, chiffrement
 
 SOLUTIONS RECOMMANDÉES PAR PROFIL:
 - Étudiant: Raspberry Pi 4 (35-55€), Mageia, LibreOffice gratuit
