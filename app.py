@@ -206,25 +206,7 @@ def submit_choice():
             "souverainete": 0,
             "inclusion": 0
         }
-    
-    # Trouver le scénario
-    scenario = next((s for s in SCENARIOS if s['id'] == scenario_id), None)
-    if not scenario or choice_index >= len(scenario['choices']):
-        return jsonify({"error": "Choix invalide"}), 400
-    
-    choice = scenario['choices'][choice_index]
-    
-    # Mettre à jour les scores
-    for key, value in choice['scores'].items():
-        session['scores'][key] += value
-    
-    session.modified = True
-    
-    return jsonify({
-        "success": True,
-        "feedback": choice['feedback'],
-        "current_scores": session['scores']
-    })
+
 
 @app.route("/results")
 def results():
@@ -347,6 +329,14 @@ Ton : pédagogique, bienveillant, optimiste. Pas de jargon technique. 300 mots m
 def resources():
     """Page ressources"""
     return render_template("resources.html")
+
+@app.route('/settings')
+def settings():
+    return render_template('settings.html')
+
+@app.route('/benevolat')
+def benevolat():
+    return render_template('benevolat.html')
 
 @app.route("/license")
 def license_page():
