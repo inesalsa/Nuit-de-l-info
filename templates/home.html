@@ -2,6 +2,154 @@
 
 {% block title %}NIRD Quest - Accueil{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* BONHOMME GAULOIS ANIMÉ */
+    .gaulois-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
+
+    .gaulois-bubble {
+        position: relative;
+        background: linear-gradient(135deg, #FFE4B5, #FFDAB9);
+        border: 3px solid #8B4513;
+        border-radius: 20px;
+        padding: 1.5rem;
+        max-width: 350px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        animation: bubbleAppear 0.5s ease;
+        margin-bottom: 1rem;
+    }
+
+    @keyframes bubbleAppear {
+        from {
+            transform: scale(0.8) translateY(20px);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .gaulois-bubble::after {
+        content: '';
+        position: absolute;
+        bottom: -15px;
+        right: 30px;
+        width: 0;
+        height: 0;
+        border-left: 15px solid transparent;
+        border-right: 15px solid transparent;
+        border-top: 15px solid #8B4513;
+    }
+
+    .gaulois-bubble::before {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        right: 33px;
+        width: 0;
+        height: 0;
+        border-left: 12px solid transparent;
+        border-right: 12px solid transparent;
+        border-top: 12px solid #FFE4B5;
+        z-index: 1;
+    }
+
+    .gaulois-bubble h4 {
+        color: #8B4513;
+        font-size: 1.1rem;
+        margin-bottom: 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .gaulois-bubble p {
+        color: #654321;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    .gaulois-character {
+        background: white;
+        border: 3px solid #8B4513;
+        border-radius: 50%;
+        width: 80px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+
+    .gaulois-character:hover {
+        transform: scale(1.1) translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .gaulois-character svg {
+        width: 60px;
+        height: 60px;
+    }
+
+    .close-bubble {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #E74C3C;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.3s;
+    }
+
+    .close-bubble:hover {
+        background: #C0392B;
+        transform: rotate(90deg);
+    }
+
+    @media (max-width: 768px) {
+        .gaulois-container {
+            bottom: 10px;
+            right: 10px;
+        }
+
+        .gaulois-bubble {
+            max-width: 250px;
+            padding: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .gaulois-character {
+            width: 60px;
+            height: 60px;
+        }
+
+        .gaulois-character svg {
+            width: 45px;
+            height: 45px;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="hero shine">
     <h1>🌟 NIRD Quest</h1>
@@ -39,6 +187,7 @@
     
     <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
         <a href="/story" class="btn btn-success">🚀 Commencer l'aventure</a>
+        <a href="/quest" class="btn" style="background: linear-gradient(135deg, #7B68EE, #9370DB);">🏰 La Quête</a>
         <a href="/solutions" class="btn btn-secondary">💡 Découvrir NIRD</a>
     </div>
 </div>
@@ -117,6 +266,15 @@
                 <p>L'assistant IA vous génère un plan d'action personnalisé pour votre établissement.</p>
             </div>
         </div>
+        
+        <div style="display: flex; gap: 1rem; align-items: start; background: rgba(123, 104, 238, 0.1); padding: 1.5rem; border-radius: 10px; border-left: 5px solid var(--secondary-color);">
+            <span style="font-size: 2rem;">🏰</span>
+            <div>
+                <h3>BONUS : La Quête du Serveur Sacré</h3>
+                <p>Un mini-jeu additionnel ! Explore 3 zones, résous des énigmes et récupère les artefacts pour restaurer le serveur du village.</p>
+                <a href="/quest" class="btn" style="background: linear-gradient(135deg, #7B68EE, #9370DB); margin-top: 0.5rem;">🎮 Jouer à la Quête</a>
+            </div>
+        </div>
     </div>
     
     <div style="text-align: center; margin-top: 2rem;">
@@ -155,4 +313,95 @@
         </ul>
     </div>
 </div>
+
+<!-- BONHOMME GAULOIS ANIMÉ -->
+<div class="gaulois-container">
+    <div class="gaulois-bubble" id="gauloisBubble" style="display: none;">
+        <button class="close-bubble" onclick="closeBubble()">×</button>
+        <h4>💡 Le savais-tu ?</h4>
+        <p id="gauloisText"></p>
+    </div>
+    
+    <div class="gaulois-character" onclick="showRandomJoke()" title="Clique pour une anecdote NIRD !">
+        <!-- SVG Guerrier Gaulois -->
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <!-- Casque -->
+            <ellipse cx="50" cy="35" rx="20" ry="15" fill="#B8860B"/>
+            <ellipse cx="50" cy="30" rx="18" ry="12" fill="#DAA520"/>
+            <!-- Ailes casque -->
+            <ellipse cx="30" cy="28" rx="5" ry="8" fill="#B8860B" transform="rotate(-20 30 28)"/>
+            <ellipse cx="70" cy="28" rx="5" ry="8" fill="#B8860B" transform="rotate(20 70 28)"/>
+            
+            <!-- Tête -->
+            <circle cx="50" cy="45" r="18" fill="#FFDAB9"/>
+            
+            <!-- Yeux -->
+            <circle cx="44" cy="43" r="2" fill="#000"/>
+            <circle cx="56" cy="43" r="2" fill="#000"/>
+            
+            <!-- Moustache -->
+            <path d="M 35 52 Q 30 55 28 58" stroke="#654321" stroke-width="2" fill="none"/>
+            <path d="M 65 52 Q 70 55 72 58" stroke="#654321" stroke-width="2" fill="none"/>
+            
+            <!-- Bouclier -->
+            <ellipse cx="30" cy="65" rx="8" ry="12" fill="#8B4513"/>
+            <ellipse cx="30" cy="65" rx="6" ry="10" fill="#DAA520"/>
+            <circle cx="30" cy="65" r="3" fill="#FFD700"/>
+            
+            <!-- Corps (tunique) -->
+            <rect x="40" y="58" width="20" height="25" fill="#4A90E2" rx="3"/>
+            
+            <!-- Bras -->
+            <rect x="35" y="60" width="5" height="15" fill="#FFDAB9"/>
+            <rect x="60" y="60" width="5" height="15" fill="#FFDAB9"/>
+            
+            <!-- Jambes -->
+            <rect x="43" y="80" width="6" height="15" fill="#654321"/>
+            <rect x="51" y="80" width="6" height="15" fill="#654321"/>
+        </svg>
+    </div>
+</div>
+
+<script>
+    const jokes = [
+        "Même Jules César a failli renoncer à conquérir la Gaule après une mise à jour de Windows sur sa tablette romaine. Les druides recommandent Linux : plus stable que la potion magique.",
+        "Il ne reste qu'un seul village gaulois qui résiste… Les autres villages ont cédé quand Rome leur a promis un support technique premium. Chez les irréductibles, le support technique c'est un menhir.",
+        "Panoramix utilise Linux : aucun plantage pendant la préparation de potion. Le dernier druide à avoir tenté Windows a fait parler tout le village en latin bugué.",
+        "Les légionnaires ont inventé CasqueOS, un OS romain… crashé dès qu'Obélix a tapé sur un casque. Incompatible avec les Gaulois.",
+        "Le héros critique souvent les Romains qui envoient des PDF impossibles à ouvrir sans un plugin magique. Les Gaulois préfèrent des parchemins libres."
+    ];
+
+    let currentJokeIndex = 0;
+    let jokeInterval;
+
+    function showRandomJoke() {
+        const bubble = document.getElementById('gauloisBubble');
+        const text = document.getElementById('gauloisText');
+        
+        text.textContent = jokes[currentJokeIndex];
+        bubble.style.display = 'block';
+        
+        currentJokeIndex = (currentJokeIndex + 1) % jokes.length;
+    }
+
+    function closeBubble() {
+        document.getElementById('gauloisBubble').style.display = 'none';
+    }
+
+    // Afficher automatiquement une blague toutes les 60 secondes
+    function startJokeRotation() {
+        jokeInterval = setInterval(() => {
+            showRandomJoke();
+            // Auto-fermer après 15 secondes
+            setTimeout(closeBubble, 15000);
+        }, 60000); // Toutes les 60 secondes
+    }
+
+    // Démarrer après 3 secondes (pour laisser l'utilisateur charger la page)
+    setTimeout(() => {
+        showRandomJoke();
+        setTimeout(closeBubble, 15000);
+        startJokeRotation();
+    }, 3000);
+</script>
 {% endblock %}
