@@ -1,0 +1,1039 @@
+{% extends "base.html" %}
+
+{% block title %}Santé Posturale - Défi Decathlon{% endblock %}
+
+{% block extra_css %}
+<style>
+    .posture-hero {
+        background: linear-gradient(135deg, #FF6B35, #FF8C42);
+        color: white;
+        padding: 4rem 2rem;
+        text-align: center;
+        border-radius: 20px;
+        margin-bottom: 3rem;
+        box-shadow: 0 10px 40px rgba(255, 107, 53, 0.3);
+    }
+
+    .posture-hero h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .level-selector {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin: 2rem 0;
+        flex-wrap: wrap;
+    }
+
+    .level-btn {
+        background: white;
+        border: 3px solid #E2E8F0;
+        color: #2D3748;
+        padding: 1rem 2rem;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-weight: bold;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .level-btn:hover {
+        border-color: #FF6B35;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+    }
+
+    .level-btn.active {
+        background: linear-gradient(135deg, #FF6B35, #FF8C42);
+        color: white;
+        border-color: #FF6B35;
+    }
+
+    .level-btn.completed {
+        background: #8BC34A;
+        color: white;
+        border-color: #8BC34A;
+    }
+
+    .level-section {
+        display: none;
+        background: white;
+        border-radius: 20px;
+        padding: 3rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    .level-section.active {
+        display: block;
+        animation: fadeInUp 0.5s;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .qcm-question {
+        background: #F7FAFC;
+        border-left: 5px solid #FF6B35;
+        padding: 2rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+    }
+
+    .qcm-options {
+        display: grid;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .qcm-option {
+        background: white;
+        border: 2px solid #E2E8F0;
+        padding: 1.5rem;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .qcm-option:hover {
+        border-color: #FF6B35;
+        transform: translateX(10px);
+    }
+
+    .qcm-option.selected {
+        border-color: #8BC34A;
+        background: rgba(139, 195, 74, 0.1);
+    }
+
+    .qcm-option input[type="radio"] {
+        width: 20px;
+        height: 20px;
+        accent-color: #FF6B35;
+    }
+
+    .exercise-card {
+        background: linear-gradient(135deg, #F7FAFC, #EDF2F7);
+        border: 3px solid #FF6B35;
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .exercise-card h3 {
+        color: #FF6B35;
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .instruction-step {
+        background: white;
+        border-left: 4px solid #8BC34A;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        border-radius: 8px;
+    }
+
+    .instruction-step strong {
+        color: #FF6B35;
+        font-size: 1.2rem;
+    }
+
+    .posture-visual {
+        display: flex;
+        gap: 2rem;
+        margin: 2rem 0;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .posture-image {
+        background: white;
+        border: 3px solid #E2E8F0;
+        border-radius: 15px;
+        padding: 1.5rem;
+        text-align: center;
+        flex: 1;
+        min-width: 250px;
+        max-width: 350px;
+    }
+
+    .posture-image.correct {
+        border-color: #8BC34A;
+    }
+
+    .posture-image.incorrect {
+        border-color: #E74C3C;
+    }
+
+    .posture-svg {
+        width: 200px;
+        height: 300px;
+        margin: 1rem auto;
+    }
+
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .product-card {
+        background: white;
+        border: 2px solid #E2E8F0;
+        border-radius: 15px;
+        padding: 1.5rem;
+        text-align: center;
+        transition: all 0.3s;
+    }
+
+    .product-card:hover {
+        border-color: #FF6B35;
+        transform: translateY(-10px);
+        box-shadow: 0 10px 30px rgba(255, 107, 53, 0.2);
+    }
+
+    .product-image {
+        width: 100%;
+        height: 200px;
+        background: linear-gradient(135deg, #F7FAFC, #EDF2F7);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 4rem;
+        margin-bottom: 1rem;
+    }
+
+    .product-price {
+        color: #FF6B35;
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin: 1rem 0;
+    }
+
+    .btn-decathlon {
+        background: linear-gradient(135deg, #FF6B35, #FF8C42);
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 30px;
+        border: none;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: inline-block;
+        text-decoration: none;
+    }
+
+    .btn-decathlon:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(255, 107, 53, 0.4);
+    }
+
+    .profile-summary {
+        background: linear-gradient(135deg, #8BC34A, #558B2F);
+        color: white;
+        padding: 2rem;
+        border-radius: 15px;
+        margin: 2rem 0;
+    }
+
+    .profile-summary h3 {
+        color: white;
+        margin-bottom: 1rem;
+    }
+
+    .alert-posture {
+        background: #FFF3CD;
+        border: 3px solid #FFC107;
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .alert-posture .icon {
+        font-size: 2.5rem;
+    }
+
+    .video-placeholder {
+        width: 100%;
+        height: 400px;
+        background: linear-gradient(135deg, #2D3748, #1A202C);
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        margin: 2rem 0;
+    }
+
+    @media (max-width: 768px) {
+        .posture-hero h1 {
+            font-size: 2rem;
+        }
+        
+        .level-selector {
+            flex-direction: column;
+        }
+        
+        .level-btn {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="posture-hero">
+    <h1>🏋️ CTO de Votre Santé Posturale</h1>
+    <p style="font-size: 1.3rem;">Défi Decathlon x NIRD Quest</p>
+    <p style="font-size: 1.1rem; margin-top: 1rem;">
+        Comme on prône la <strong>durabilité du matériel</strong>, prenons soin de la <strong>durabilité de notre corps</strong> !
+    </p>
+</div>
+
+<div class="card">
+    <h2>🎯 Les 4 Niveaux du Défi</h2>
+    <div class="level-selector">
+        <button class="level-btn active" onclick="showLevel(1)">
+            <span>1️⃣</span>
+            <span>Profilage Sportif</span>
+        </button>
+        <button class="level-btn" onclick="showLevel(2)" id="btn-level-2">
+            <span>2️⃣</span>
+            <span>Instructions</span>
+        </button>
+        <button class="level-btn" onclick="showLevel(3)" id="btn-level-3">
+            <span>3️⃣</span>
+            <span>Visualisation</span>
+        </button>
+        <button class="level-btn" onclick="showLevel(4)" id="btn-level-4">
+            <span>4️⃣</span>
+            <span>Produits Decathlon</span>
+        </button>
+    </div>
+</div>
+
+<!-- NIVEAU 1 : PROFILAGE -->
+<div class="level-section active" id="level-1">
+    <h2 style="color: #FF6B35;">1️⃣ Niveau 1 : Profilage Sportif</h2>
+    <p style="font-size: 1.1rem; color: #4A5568; margin-bottom: 2rem;">
+        Commençons par établir votre profil sportif pour personnaliser vos recommandations.
+    </p>
+
+    <div class="qcm-question">
+        <h3>Question 1 : Quel est votre niveau sportif actuel ?</h3>
+        <div class="qcm-options">
+            <label class="qcm-option">
+                <input type="radio" name="q1" value="debutant" onclick="saveAnswer('niveau', 'debutant')">
+                <div>
+                    <strong>🌱 Débutant</strong>
+                    <p style="margin: 0; color: #718096;">Je commence tout juste ou je reprends après une longue pause</p>
+                </div>
+            </label>
+            <label class="qcm-option">
+                <input type="radio" name="q1" value="intermediaire" onclick="saveAnswer('niveau', 'intermediaire')">
+                <div>
+                    <strong>💪 Intermédiaire</strong>
+                    <p style="margin: 0; color: #718096;">Je pratique régulièrement (1-3x/semaine)</p>
+                </div>
+            </label>
+            <label class="qcm-option">
+                <input type="radio" name="q1" value="avance" onclick="saveAnswer('niveau', 'avance')">
+                <div>
+                    <strong>🏆 Avancé</strong>
+                    <p style="margin: 0; color: #718096;">Je m'entraîne intensément (4x+/semaine)</p>
+                </div>
+            </label>
+        </div>
+    </div>
+
+    <div class="qcm-question">
+        <h3>Question 2 : Quels sports pratiquez-vous ? (plusieurs choix possibles)</h3>
+        <div class="qcm-options">
+            <label class="qcm-option">
+                <input type="checkbox" name="sport" value="musculation" onclick="saveSport('musculation')">
+                <span>🏋️ Musculation / Fitness</span>
+            </label>
+            <label class="qcm-option">
+                <input type="checkbox" name="sport" value="yoga" onclick="saveSport('yoga')">
+                <span>🧘 Yoga / Pilates</span>
+            </label>
+            <label class="qcm-option">
+                <input type="checkbox" name="sport" value="course" onclick="saveSport('course')">
+                <span>🏃 Course à pied</span>
+            </label>
+            <label class="qcm-option">
+                <input type="checkbox" name="sport" value="velo" onclick="saveSport('velo')">
+                <span>🚴 Cyclisme</span>
+            </label>
+            <label class="qcm-option">
+                <input type="checkbox" name="sport" value="natation" onclick="saveSport('natation')">
+                <span>🏊 Natation</span>
+            </label>
+        </div>
+    </div>
+
+    <div class="qcm-question">
+        <h3>Question 3 : Quel est votre objectif principal ?</h3>
+        <div class="qcm-options">
+            <label class="qcm-option">
+                <input type="radio" name="q3" value="forme" onclick="saveAnswer('objectif', 'forme')">
+                <span>💚 Rester en forme et en bonne santé</span>
+            </label>
+            <label class="qcm-option">
+                <input type="radio" name="q3" value="muscle" onclick="saveAnswer('objectif', 'muscle')">
+                <span>💪 Gagner en force et en muscle</span>
+            </label>
+            <label class="qcm-option">
+                <input type="radio" name="q3" value="souplesse" onclick="saveAnswer('objectif', 'souplesse')">
+                <span>🤸 Améliorer ma souplesse et ma posture</span>
+            </label>
+            <label class="qcm-option">
+                <input type="radio" name="q3" value="perte" onclick="saveAnswer('objectif', 'perte')">
+                <span>🔥 Perdre du poids</span>
+            </label>
+        </div>
+    </div>
+
+    <div class="qcm-question">
+        <h3>Question 4 : Avez-vous des douleurs ou blessures actuelles ?</h3>
+        <div class="qcm-options">
+            <label class="qcm-option">
+                <input type="radio" name="q4" value="aucune" onclick="saveAnswer('douleur', 'aucune')">
+                <span>✅ Aucune douleur</span>
+            </label>
+            <label class="qcm-option">
+                <input type="radio" name="q4" value="dos" onclick="saveAnswer('douleur', 'dos')">
+                <span>🔴 Douleurs au dos</span>
+            </label>
+            <label class="qcm-option">
+                <input type="radio" name="q4" value="genoux" onclick="saveAnswer('douleur', 'genoux')">
+                <span>🔴 Douleurs aux genoux</span>
+            </label>
+            <label class="qcm-option">
+                <input type="radio" name="q4" value="epaules" onclick="saveAnswer('douleur', 'epaules')">
+                <span>🔴 Douleurs aux épaules</span>
+            </label>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 3rem;">
+        <button class="btn-decathlon" onclick="completeLevel1()">
+            ✅ Valider mon profil
+        </button>
+    </div>
+</div>
+
+<!-- NIVEAU 2 : INSTRUCTIONS -->
+<div class="level-section" id="level-2">
+    <h2 style="color: #FF6B35;">2️⃣ Niveau 2 : Instructions Personnalisées</h2>
+    
+    <div id="profile-result" class="profile-summary" style="display: none;">
+        <h3>📊 Votre Profil Sportif</h3>
+        <div id="profile-display"></div>
+    </div>
+
+    <div class="alert-posture">
+        <span class="icon">⚠️</span>
+        <div>
+            <strong>Important !</strong> Une mauvaise posture peut causer des blessures graves. 
+            Suivez attentivement les instructions ci-dessous adaptées à votre profil.
+        </div>
+    </div>
+
+    <div class="exercise-card" id="exercise-squat">
+        <h3>🦵 SQUAT (Flexion de Jambes)</h3>
+        
+        <div class="instruction-step">
+            <strong>Étape 1 : Position de départ</strong>
+            <p>
+                • Pieds écartés à largeur d'épaules<br>
+                • Pointes de pieds légèrement vers l'extérieur (10-15°)<br>
+                • Dos droit, regard devant vous<br>
+                • Bras tendus devant ou croisés sur la poitrine
+            </p>
+        </div>
+
+        <div class="instruction-step">
+            <strong>Étape 2 : Descente contrôlée</strong>
+            <p>
+                • Inspirez profondément<br>
+                • Poussez les fesses vers l'arrière (comme pour s'asseoir)<br>
+                • Descendez jusqu'à ce que les cuisses soient parallèles au sol<br>
+                • <span style="color: #E74C3C;">❌ NE PAS : genoux qui dépassent les orteils</span><br>
+                • <span style="color: #E74C3C;">❌ NE PAS : dos courbé</span>
+            </p>
+        </div>
+
+        <div class="instruction-step">
+            <strong>Étape 3 : Remontée puissante</strong>
+            <p>
+                • Expirez en poussant sur vos talons<br>
+                • Contractez les fessiers et les abdominaux<br>
+                • Remontez en gardant le dos droit<br>
+                • Retour à la position initiale
+            </p>
+        </div>
+
+        <div class="instruction-step">
+            <strong>🎯 Répétitions recommandées pour vous</strong>
+            <p id="squat-reps"></p>
+        </div>
+    </div>
+
+    <div class="exercise-card" id="exercise-pushup">
+        <h3>💪 POMPES (Push-ups)</h3>
+        
+        <div class="instruction-step">
+            <strong>Étape 1 : Position de planche</strong>
+            <p>
+                • Mains au sol, largeur d'épaules<br>
+                • Corps aligné : tête, épaules, hanches, pieds<br>
+                • Abdominaux et fessiers contractés<br>
+                • Regard vers le sol (nuque neutre)
+            </p>
+        </div>
+
+        <div class="instruction-step">
+            <strong>Étape 2 : Descente</strong>
+            <p>
+                • Inspirez en pliant les coudes<br>
+                • Coudes à 45° du corps (pas écartés à 90°)<br>
+                • Descendez jusqu'à ce que le torse touche presque le sol<br>
+                • <span style="color: #E74C3C;">❌ NE PAS : cambrer le dos</span><br>
+                • <span style="color: #E74C3C;">❌ NE PAS : laisser tomber les hanches</span>
+            </p>
+        </div>
+
+        <div class="instruction-step">
+            <strong>Étape 3 : Remontée</strong>
+            <p>
+                • Expirez en poussant fort<br>
+                • Gardez le corps gainé et aligné<br>
+                • Extension complète des bras<br>
+                • Retour à la position de planche
+            </p>
+        </div>
+
+        <div class="instruction-step">
+            <strong>🎯 Variante recommandée pour vous</strong>
+            <p id="pushup-variant"></p>
+        </div>
+    </div>
+
+    <div class="exercise-card" id="exercise-plank">
+        <h3>🧱 PLANCHE (Gainage)</h3>
+        
+        <div class="instruction-step">
+            <strong>Position correcte</strong>
+            <p>
+                • Avant-bras au sol, coudes sous les épaules<br>
+                • Corps parfaitement aligné (ligne droite)<br>
+                • Abdominaux et fessiers contractés<br>
+                • Respiration régulière<br>
+                • <span style="color: #E74C3C;">❌ NE PAS : creuser le dos</span><br>
+                • <span style="color: #E74C3C;">❌ NE PAS : lever les fesses</span>
+            </p>
+        </div>
+
+        <div class="instruction-step">
+            <strong>🎯 Durée recommandée pour vous</strong>
+            <p id="plank-duration"></p>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 3rem;">
+        <button class="btn-decathlon" onclick="completeLevel2()">
+            ✅ J'ai compris les instructions
+        </button>
+    </div>
+</div>
+
+<!-- NIVEAU 3 : VISUALISATION -->
+<div class="level-section" id="level-3">
+    <h2 style="color: #FF6B35;">3️⃣ Niveau 3 : Illustration et Visualisation</h2>
+    <p style="font-size: 1.1rem; color: #4A5568; margin-bottom: 2rem;">
+        Visualisez les postures correctes vs incorrectes pour éviter les blessures.
+    </p>
+
+    <h3 style="color: #2D3748; margin-bottom: 2rem;">🦵 SQUAT : Bonne vs Mauvaise Posture</h3>
+    <div class="posture-visual">
+        <div class="posture-image correct">
+            <h4 style="color: #8BC34A;">✅ POSTURE CORRECTE</h4>
+            <svg class="posture-svg" viewBox="0 0 200 300">
+                <!-- Bonne posture squat -->
+                <line x1="100" y1="50" x2="100" y2="200" stroke="#8BC34A" stroke-width="3" stroke-dasharray="5,5"/>
+                
+                <!-- Tête -->
+                <circle cx="100" cy="40" r="15" fill="#FFDAB9"/>
+                
+                <!-- Corps -->
+                <rect x="85" y="55" width="30" height="50" fill="#4A90E2" rx="5"/>
+                
+                <!-- Bras -->
+                <line x1="85" y1="65" x2="60" y2="90" stroke="#FFDAB9" stroke-width="8" stroke-linecap="round"/>
+                <line x1="115" y1="65" x2="140" y2="90" stroke="#FFDAB9" stroke-width="8" stroke-linecap="round"/>
+                
+                <!-- Jambes fléchies -->
+                <line x1="90" y1="105" x2="70" y2="160" stroke="#2D3748" stroke-width="10" stroke-linecap="round"/>
+                <line x1="110" y1="105" x2="130" y2="160" stroke="#2D3748" stroke-width="10" stroke-linecap="round"/>
+                
+                <!-- Genoux -->
+                <circle cx="70" cy="160" r="8" fill="#8BC34A"/>
+                <circle cx="130" cy="160" r="8" fill="#8BC34A"/>
+                
+                <!-- Bas jambes -->
+                <line x1="70" y1="160" x2="60" y2="220" stroke="#2D3748" stroke-width="10" stroke-linecap="round"/>
+                <line x1="130" y1="160" x2="140" y2="220" stroke="#2D3748" stroke-width="10" stroke-linecap="round"/>
+                
+                <!-- Pieds -->
+                <ellipse cx="55" cy="230" rx="15" ry="8" fill="#654321"/>
+                <ellipse cx="145" cy="230" rx="15" ry="8" fill="#654321"/>
+                
+                <!-- Annotations -->
+                <text x="100" y="260" text-anchor="middle" fill="#8BC34A" font-size="12" font-weight="bold">
+                    Dos droit
+                </text>
+                <text x="100" y="275" text-anchor="middle" fill="#8BC34A" font-size="12" font-weight="bold">
+                    Genoux alignés
+                </text>
+            </svg>
+            <p style="color: #2D3748; line-height: 1.6;">
+                • Dos droit et vertical<br>
+                • Genoux alignés avec les pieds<br>
+                • Poids sur les talons<br>
+                • Fesses poussées vers l'arrière
+            </p>
+        </div>
+
+        <div class="posture-image incorrect">
+            <h4 style="color: #E74C3C;">❌ POSTURE INCORRECTE</h4>
+            <svg class="posture-svg" viewBox="0 0 200 300">
+                <!-- Mauvaise posture squat -->
+                <line x1="100" y1="50" x2="120" y2="200" stroke="#E74C3C" stroke-width="3" stroke-dasharray="5,5"/>
+                
+                <!-- Tête -->
+                <circle cx="110" cy="40" r="15" fill="#FFDAB9"/>
+                
+                <!-- Corps penché -->
+                <rect x="95" y="55" width="30" height="50" fill="#4A90E2" rx="5" transform="rotate(15 110 80)"/>
+                
+                <!-- Bras -->
+                <line x1="95" y1="65" x2="70" y2="100" stroke="#FFDAB9" stroke-width="8" stroke-linecap="round"/>
+                <line x1="125" y1="65" x2="150" y2="100" stroke="#FFDAB9" stroke-width="8" stroke-linecap="round"/>
+                
+                <!-- Jambes mal positionnées -->
+                <line x1="100" y1="105" x2="80" y2="160" stroke="#2D3748" stroke-width="10" stroke-linecap="round"/>
+                <line x1="120" y1="105" x2="140" y2="160" stroke="#2D3748" stroke-width="10" stroke-linecap="round"/>
+                
+                <!-- Genoux qui avancent (erreur) -->
+                <circle cx="70" cy="165" r="8" fill="#E74C3C"/>
+                <circle cx="130" cy="165" r="8" fill="#E74C3C"/>
+                
+                <!-- Bas jambes -->
+                <line x1="70" y1="165" x2="50" y2="220" stroke="#2D3748" stroke-width="10" stroke-linecap="round"/>
+                <line x1="130" y1="165" x2="110" y2="220" stroke="#2D3748" stroke-width="10" stroke-linecap="round"/>
+                
+                <!-- Pieds -->
+                <ellipse cx="45" cy="230" rx="15" ry="8" fill="#654321"/>
+                <ellipse cx="115" cy="230" rx="15" ry="8" fill="#654321"/>
+                
+                <!-- Annotations -->
+                <text x="110" y="260" text-anchor="middle" fill="#E74C3C" font-size="12" font-weight="bold">
+                    Dos courbé
+                </text>
+                <text x="110" y="275" text-anchor="middle" fill="#E74C3C" font-size="12" font-weight="bold">
+                    Genoux en avant
+                </text>
+            </svg>
+            <p style="color: #2D3748; line-height: 1.6;">
+                • ❌ Dos courbé en avant<br>
+                • ❌ Genoux qui dépassent les orteils<br>
+                • ❌ Poids sur l'avant du pied<br>
+                • ❌ Risque de blessure au dos et genoux
+            </p>
+        </div>
+    </div>
+
+    <h3 style="color: #2D3748; margin: 3rem 0 2rem;">💪 POMPES : Bonne vs Mauvaise Posture</h3>
+    <div class="posture-visual">
+        <div class="posture-image correct">
+            <h4 style="color: #8BC34A;">✅ POSTURE CORRECTE</h4>
+            <svg class="posture-svg" viewBox="0 0 300 200">
+                <!-- Bonne posture pompe (corps aligné) -->
+                <line x1="50" y1="100" x2="250" y2="100" stroke="#8BC34A" stroke-width="3" stroke-dasharray="5,5"/>
+                
+                <!-- Tête -->
+                <circle cx="70" cy="100" r="15" fill="#FFDAB9"/>
+                
+                <!-- Corps aligné -->
+                <rect x="85" y="90" width="150" height="20" fill="#4A90E2" rx="5"/>
+                
+                <!-- Bras -->
+                <line x1="100" y1="100" x2="100" y2="140" stroke="#FFDAB9" stroke-width="10" stroke-linecap="round"/>
+                <line x1="220" y1="100" x2="220" y2="140" stroke="#FFDAB9" stroke-width="10" stroke-linecap="round"/>
+                
+                <!-- Mains -->
+                <ellipse cx="100" cy="145" rx="12" ry="8" fill="#FFDAB9"/>
+                <ellipse cx="220" cy="145" rx="12" ry="8" fill="#FFDAB9"/>
+                
+                <!-- Jambes -->
+                <rect x="235" y="95" width="15" height="10" fill="#2D3748"/>
+                
+                <text x="150" y="70" text-anchor="middle" fill="#8BC34A" font-size="14" font-weight="bold">
+                    Alignement parfait
+                </text>
+            </svg>
+            <p style="color: #2D3748; line-height: 1.6;">
+                • Corps parfaitement aligné<br>
+                • Coudes à 45° du corps<br>
+                • Abdos et fessiers gainés<br>
+                • Nuque neutre, regard au sol
+            </p>
+        </div>
+
+        <div class="posture-image incorrect">
+            <h4 style="color: #E74C3C;">❌ POSTURE INCORRECTE</h4>
+            <svg class="posture-svg" viewBox="0 0 300 200">
+                <!-- Mauvaise posture pompe (dos cambré) -->
+                <path d="M 50 100 Q 150 80 250 120" stroke="#E74C3C" stroke-width="3" stroke-dasharray="5,5" fill="none"/>
+                
+                <!-- Tête -->
+                <circle cx="70" cy="95" r="15" fill="#FFDAB9"/>
+                
+                <!-- Corps cambré -->
+                <path d="M 85 95 Q 160 75 235 115" fill="#4A90E2" stroke="#4A90E2" stroke-width="20"/>
+                
+                <!-- Bras -->
+                <line x1="100" y1="90" x2="100" y2="140" stroke="#FFDAB9" stroke-width="10" stroke-linecap="round"/>
+                <line x1="220" y1="105" x2="220" y2="145" stroke="#FFDAB9" stroke-width="10" stroke-linecap="round"/>
+                
+                <!-- Mains -->
+                <ellipse cx="100" cy="145" rx="12" ry="8" fill="#FFDAB9"/>
+                <ellipse cx="220" cy="150" rx="12" ry="8" fill="#FFDAB9"/>
+                
+                <text x="150" y="50" text-anchor="middle" fill="#E74C3C" font-size="14" font-weight="bold">
+                    Dos cambré
+                </text>
+            </svg>
+            <p style="color: #2D3748; line-height: 1.6;">
+                • ❌ Dos cambré (lordose)<br>
+                • ❌ Hanches qui tombent<br>
+                • ❌ Coudes trop écartés<br>
+                • ❌ Risque de blessure lombaire
+            </p>
+        </div>
+    </div>
+
+    <div class="video-placeholder">
+        🎥 Vidéo démonstration : Mouvements en temps réel
+        <br>
+        <small>(À venir - intégration vidéo YouTube/Decathlon)</small>
+    </div>
+
+    <div style="text-align: center; margin-top: 3rem;">
+        <button class="btn-decathlon" onclick="completeLevel3()">
+            ✅ J'ai visualisé les postures
+        </button>
+    </div>
+</div>
+
+<!-- NIVEAU 4 : PRODUITS DECATHLON -->
+<div class="level-section" id="level-4">
+    <h2 style="color: #FF6B35;">4️⃣ Niveau 4 : Produits Decathlon Recommandés</h2>
+    <p style="font-size: 1.1rem; color: #4A5568; margin-bottom: 2rem;">
+        Équipez-vous avec les meilleurs produits pour votre pratique sportive !
+    </p>
+
+    <h3 style="color: #2D3748;">🛍️ Sélection personnalisée pour votre profil</h3>
+    
+    <div class="product-grid" id="product-recommendations">
+        <!-- Produits générés dynamiquement selon le profil -->
+    </div>
+
+    <div style="text-align: center; margin-top: 3rem;">
+        <a href="https://www.decathlon.fr" target="_blank" class="btn-decathlon" style="font-size: 1.2rem; padding: 1.5rem 3rem;">
+            🛒 Découvrir plus sur Decathlon.fr
+        </a>
+    </div>
+
+    <div style="background: linear-gradient(135deg, #4A90E2, #357ABD); color: white; padding: 3rem; border-radius: 20px; margin-top: 3rem; text-align: center;">
+        <h2 style="color: white;">🎉 Félicitations !</h2>
+        <p style="font-size: 1.2rem; margin: 1.5rem 0;">
+            Vous avez complété les 4 niveaux du défi Decathlon !
+        </p>
+        <p style="font-size: 1.1rem;">
+            Vous êtes maintenant le <strong>CTO de votre santé posturale</strong> 💪
+        </p>
+        <div style="margin-top: 2rem;">
+            <a href="/" class="btn-decathlon" style="background: white; color: #FF6B35;">
+                ← Retour à NIRD Quest
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+// DONNÉES UTILISATEUR
+let userProfile = {
+    niveau: null,
+    sports: [],
+    objectif: null,
+    douleur: null
+};
+
+// NIVEAU 1 : Sauvegarde des réponses
+function saveAnswer(key, value) {
+    userProfile[key] = value;
+    localStorage.setItem('posture_profile', JSON.stringify(userProfile));
+    
+    // Feedback visuel
+    event.target.closest('.qcm-option').classList.add('selected');
+    event.target.closest('.qcm-question').querySelectorAll('.qcm-option').forEach(opt => {
+        if (opt !== event.target.closest('.qcm-option')) {
+            opt.classList.remove('selected');
+        }
+    });
+}
+
+function saveSport(sport) {
+    if (event.target.checked) {
+        userProfile.sports.push(sport);
+    } else {
+        userProfile.sports = userProfile.sports.filter(s => s !== sport);
+    }
+    localStorage.setItem('posture_profile', JSON.stringify(userProfile));
+    event.target.closest('.qcm-option').classList.toggle('selected');
+}
+
+function completeLevel1() {
+    // Vérifier que tout est rempli
+    if (!userProfile.niveau || !userProfile.objectif || !userProfile.douleur) {
+        alert('⚠️ Veuillez répondre à toutes les questions avant de continuer.');
+        return;
+    }
+    
+    if (userProfile.sports.length === 0) {
+        alert('⚠️ Veuillez sélectionner au moins un sport.');
+        return;
+    }
+    
+    // Marquer comme complété
+    document.getElementById('btn-level-2').classList.add('completed');
+    
+    // Afficher niveau 2
+    showLevel(2);
+    
+    // Générer les recommandations personnalisées
+    generateInstructions();
+}
+
+// NIVEAU 2 : Génération d'instructions personnalisées
+function generateInstructions() {
+    const profile = userProfile;
+    
+    // Afficher le profil
+    document.getElementById('profile-result').style.display = 'block';
+    document.getElementById('profile-display').innerHTML = `
+        <p><strong>Niveau :</strong> ${profile.niveau}</p>
+        <p><strong>Sports :</strong> ${profile.sports.join(', ')}</p>
+        <p><strong>Objectif :</strong> ${profile.objectif}</p>
+        <p><strong>Douleurs :</strong> ${profile.douleur === 'aucune' ? 'Aucune' : profile.douleur}</p>
+    `;
+    
+    // Adapter les répétitions selon le niveau
+    let squatReps, pushupVariant, plankDuration;
+    
+    if (profile.niveau === 'debutant') {
+        squatReps = '3 séries de 10 répétitions';
+        pushupVariant = 'Pompes sur les genoux : 3 séries de 8 répétitions';
+        plankDuration = '3 séries de 20 secondes';
+    } else if (profile.niveau === 'intermediaire') {
+        squatReps = '4 séries de 15 répétitions';
+        pushupVariant = 'Pompes classiques : 4 séries de 12 répétitions';
+        plankDuration = '3 séries de 45 secondes';
+    } else {
+        squatReps = '5 séries de 20 répétitions (avec poids si possible)';
+        pushupVariant = 'Pompes déclinées : 4 séries de 15 répétitions';
+        plankDuration = '4 séries de 60 secondes';
+    }
+    
+    // Adapter selon les douleurs
+    if (profile.douleur === 'genoux') {
+        squatReps += ' (Amplitude réduite si douleur)';
+    }
+    if (profile.douleur === 'dos') {
+        plankDuration += ' (Surveiller l\'alignement)';
+    }
+    if (profile.douleur === 'epaules') {
+        pushupVariant += ' (Réduire l\'amplitude)';
+    }
+    
+    document.getElementById('squat-reps').textContent = squatReps;
+    document.getElementById('pushup-variant').textContent = pushupVariant;
+    document.getElementById('plank-duration').textContent = plankDuration;
+}
+
+function completeLevel2() {
+    document.getElementById('btn-level-3').classList.add('completed');
+    showLevel(3);
+}
+
+function completeLevel3() {
+    document.getElementById('btn-level-4').classList.add('completed');
+    showLevel(4);
+    generateProducts();
+}
+
+// NIVEAU 4 : Génération de produits personnalisés
+function generateProducts() {
+    const profile = userProfile;
+    const container = document.getElementById('product-recommendations');
+    
+    let products = [];
+    
+    // Produits selon les sports
+    if (profile.sports.includes('musculation')) {
+        products.push({
+            name: 'Kit Haltères Réglables',
+            price: '49.99€',
+            icon: '🏋️',
+            desc: 'De 2 à 10kg, parfait pour débuter'
+        });
+        products.push({
+            name: 'Tapis de Protection Sol',
+            price: '29.99€',
+            icon: '⬛',
+            desc: 'Protège votre sol et amortit'
+        });
+    }
+    
+    if (profile.sports.includes('yoga')) {
+        products.push({
+            name: 'Tapis de Yoga 5mm',
+            price: '24.99€',
+            icon: '🧘',
+            desc: 'Antidérapant et confortable'
+        });
+        products.push({
+            name: 'Bloc de Yoga (x2)',
+            price: '12.99€',
+            icon: '🟦',
+            desc: 'Améliore votre souplesse'
+        });
+    }
+    
+    if (profile.sports.includes('course')) {
+        products.push({
+            name: 'Chaussures Running',
+            price: '79.99€',
+            icon: '👟',
+            desc: 'Amorti optimal, légères'
+        });
+    }
+    
+    // Produits génériques recommandés
+    products.push({
+        name: 'Bandes de Résistance (Set)',
+        price: '14.99€',
+        icon: '🎗️',
+        desc: '3 niveaux de résistance'
+    });
+    
+    products.push({
+        name: 'Rouleau de Massage',
+        price: '19.99€',
+        icon: '🔵',
+        desc: 'Récupération musculaire'
+    });
+    
+    if (profile.douleur !== 'aucune') {
+        products.push({
+            name: 'Ceinture de Maintien Lombaire',
+            price: '34.99€',
+            icon: '🩹',
+            desc: 'Protège votre dos'
+        });
+    }
+    
+    // Générer le HTML
+    container.innerHTML = products.map(p => `
+        <div class="product-card">
+            <div class="product-image">${p.icon}</div>
+            <h4 style="color: #2D3748; margin-bottom: 0.5rem;">${p.name}</h4>
+            <p style="color: #718096; font-size: 0.9rem;">${p.desc}</p>
+            <div class="product-price">${p.price}</div>
+            <a href="https://www.decathlon.fr" target="_blank" class="btn-decathlon">
+                Voir sur Decathlon
+            </a>
+        </div>
+    `).join('');
+}
+
+// NAVIGATION NIVEAUX
+function showLevel(level) {
+    // Cacher tous les niveaux
+    document.querySelectorAll('.level-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+    
+    // Afficher le niveau demandé
+    document.getElementById(`level-${level}`).classList.add('active');
+    document.querySelector(`[onclick="showLevel(${level})"]`).classList.add('active');
+    
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// CHARGEMENT DES DONNÉES SAUVEGARDÉES
+window.addEventListener('DOMContentLoaded', () => {
+    const saved = localStorage.getItem('posture_profile');
+    if (saved) {
+        userProfile = JSON.parse(saved);
+        
+        // Restaurer les sélections
+        if (userProfile.niveau) {
+            const radio = document.querySelector(`input[value="${userProfile.niveau}"]`);
+            if (radio) {
+                radio.checked = true;
+                radio.closest('.qcm-option').classList.add('selected');
+            }
+        }
+        
+        userProfile.sports.forEach(sport => {
+            const checkbox = document.querySelector(`input[value="${sport}"]`);
+            if (checkbox) {
+                checkbox.checked = true;
+                checkbox.closest('.qcm-option').classList.add('selected');
+            }
+        });
+        
+        // Autres champs...
+    }
+});
+</script>
+{% endblock %}
