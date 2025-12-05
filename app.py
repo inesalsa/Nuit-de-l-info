@@ -194,18 +194,53 @@ def game():
 @app.route("/api/submit_choice", methods=['POST'])
 def submit_choice():
     """Enregistre un choix et met à jour le score"""
-    data = request.json
-    scenario_id = data.get('scenario_id')
-    choice_index = data.get('choice_index')
+    try:
+        data = request.json
+        scenario_id = data.get('scenario_id')
+        choice_index = data.get('choice_index')
+        
+        logger.info(f"Réception choix - Scenario: {scenario_id}, Choice: {choice_index}")
+        
+        if 'scores' not in session:
+            session['scores'] = {
+                "durabilite": 0,
+                "autonomie": 0,
+                "sobriete": 0,
+                "souverainete": 0,
+                "inclusion": 0
+            }
+        
+        # Trouver le scénario correspondant
+        scenario = next((s for s in SCENARIOS if s['id'] == scenario_id), None)
+        if not scenario:
+            logger.error(f"Scenario {scenario_id} introuvable")
+            return jsonify({"success": False, "error": "Scenario not found"}), 404
+        
+        # Vérifier que l'index est valide
+        if choice_index < 0 or choice_index >= len(scenario['choices']):
+            logger.error(f"Index invalide: {choice_index} pour scenario {scenario_id}")
+            return jsonify({"success": False, "error": "Invalid choice index"}), 400
+        
+        # Récupérer le choix
+        choice = scenario['choices'][choice_index]
+        
+        # Mettre à jour les scores
+        for key, value in choice['scores'].items():
+            session['scores'][key] += value
+        
+        session.modified = True
+        
+        logger.info(f"✅ Choix enregistré - Scores: {session['scores']}")
+        
+        return jsonify({
+            "success": True,
+            "feedback": choice['feedback'],
+            "scores": session['scores']
+        })
     
-    if 'scores' not in session:
-        session['scores'] = {
-            "durabilite": 0,
-            "autonomie": 0,
-            "sobriete": 0,
-            "souverainete": 0,
-            "inclusion": 0
-        }
+    except Exception as e:
+        logger.error(f"❌ Erreur submit_choice: {str(e)}", exc_info=True)
+        return jsonify({"success": False, "error": str(e)}), 500
 
 
 @app.route("/results")
