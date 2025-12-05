@@ -1,6 +1,8 @@
 # 🌟 NIRD Quest - Le Village Numérique Résilient
 
-Un jeu interactif et éducatif pour découvrir la démarche **NIRD** (Numérique Inclusif, Responsable et Durable) dans les établissements scolaires.
+Un jeu interactif et éducatif pour découvrir la démarche **NIRD** (Numérique Inclusif, Responsable et Durable) dans les établissements scolaires. 
+
+Le site : https://nuit-de-l-info-108k.onrender.com (il faut attendre 1-2 minutes pour que le serveur se lance car il se met en mode cold start après 15min d'inactivité
 
 ![Licence MIT](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Flask](https://img.shields.io/badge/Flask-3.0-green.svg)
