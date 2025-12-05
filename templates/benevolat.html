@@ -1,0 +1,474 @@
+{% extends "base.html" %}
+
+{% block title %}Bénévolat - Rejoindre la Communauté NIRD{% endblock %}
+
+{% block extra_css %}
+<style>
+    .benevolat-hero {
+        background: linear-gradient(135deg, #7B68EE, #9370DB);
+        color: white;
+        padding: 4rem 2rem;
+        text-align: center;
+        border-radius: 20px;
+        margin-bottom: 3rem;
+        box-shadow: 0 10px 40px rgba(123, 104, 238, 0.3);
+    }
+
+    .benevolat-hero h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .benevolat-hero p {
+        font-size: 1.2rem;
+        color: #E8E0FF;
+        max-width: 700px;
+        margin: 0 auto;
+        line-height: 1.8;
+    }
+
+    .mission-section {
+        background: white;
+        border-radius: 20px;
+        padding: 3rem;
+        margin-bottom: 3rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    .mission-section h2 {
+        color: #7B68EE;
+        font-size: 2rem;
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .mission-section p {
+        color: #4A5568;
+        line-height: 1.8;
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .action-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .action-card {
+        background: linear-gradient(135deg, #F7FAFC, #EDF2F7);
+        border: 3px solid #E2E8F0;
+        border-radius: 15px;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s;
+        cursor: pointer;
+    }
+
+    .action-card:hover {
+        border-color: #7B68EE;
+        transform: translateY(-10px);
+        box-shadow: 0 10px 30px rgba(123, 104, 238, 0.2);
+    }
+
+    .action-card .icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+    }
+
+    .action-card h3 {
+        color: #2D3748;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .action-card p {
+        color: #718096;
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+    }
+
+    .action-card .btn-action {
+        display: inline-block;
+        background: linear-gradient(135deg, #7B68EE, #9370DB);
+        color: white;
+        padding: 0.8rem 2rem;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: all 0.3s;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    .action-card .btn-action:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(123, 104, 238, 0.4);
+    }
+
+    .discord-section {
+        background: linear-gradient(135deg, #5865F2, #7289DA);
+        color: white;
+        border-radius: 20px;
+        padding: 3rem;
+        text-align: center;
+        margin-bottom: 3rem;
+        box-shadow: 0 10px 40px rgba(88, 101, 242, 0.3);
+    }
+
+    .discord-section h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .discord-section p {
+        font-size: 1.2rem;
+        color: #E3E7FF;
+        margin-bottom: 2rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .discord-section .btn-discord {
+        display: inline-block;
+        background: white;
+        color: #5865F2;
+        padding: 1.2rem 3rem;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1.2rem;
+        transition: all 0.3s;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .discord-section .btn-discord:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .wero-section {
+        background: white;
+        border-radius: 20px;
+        padding: 3rem;
+        margin-bottom: 3rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    .wero-section h2 {
+        color: #4A90E2;
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        justify-content: center;
+    }
+
+    .wero-section p {
+        text-align: center;
+        color: #4A5568;
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+        line-height: 1.8;
+    }
+
+    .wero-info {
+        background: #E3F2FD;
+        border: 3px solid #4A90E2;
+        border-radius: 15px;
+        padding: 2rem;
+        margin: 2rem 0;
+    }
+
+    .wero-info h3 {
+        color: #1565C0;
+        margin-bottom: 1rem;
+        font-size: 1.3rem;
+    }
+
+    .wero-info ul {
+        color: #0D47A1;
+        line-height: 2;
+        margin-left: 2rem;
+    }
+
+    .wero-info ul li {
+        margin-bottom: 0.5rem;
+    }
+
+    .donation-amounts {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin: 2rem 0;
+        flex-wrap: wrap;
+    }
+
+    .amount-btn {
+        background: #F7FAFC;
+        border: 3px solid #E2E8F0;
+        padding: 1rem 2rem;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-weight: bold;
+        font-size: 1.2rem;
+        color: #2D3748;
+    }
+
+    .amount-btn:hover {
+        border-color: #4A90E2;
+        background: #E3F2FD;
+        transform: translateY(-3px);
+    }
+
+    .amount-btn.selected {
+        background: #4A90E2;
+        color: white;
+        border-color: #4A90E2;
+    }
+
+    .btn-wero {
+        display: inline-block;
+        background: linear-gradient(135deg, #4A90E2, #357ABD);
+        color: white;
+        padding: 1.2rem 3rem;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1.2rem;
+        transition: all 0.3s;
+        box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-wero:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(74, 144, 226, 0.5);
+    }
+
+    .testimonials {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+    }
+
+    .testimonial {
+        background: #F7FAFC;
+        border-left: 5px solid #7B68EE;
+        border-radius: 10px;
+        padding: 1.5rem;
+    }
+
+    .testimonial p {
+        color: #2D3748;
+        font-style: italic;
+        margin-bottom: 1rem;
+        line-height: 1.6;
+    }
+
+    .testimonial .author {
+        color: #7B68EE;
+        font-weight: bold;
+        text-align: right;
+    }
+
+    @media (max-width: 768px) {
+        .benevolat-hero h1 {
+            font-size: 2rem;
+        }
+
+        .action-cards {
+            grid-template-columns: 1fr;
+        }
+
+        .donation-amounts {
+            flex-direction: column;
+        }
+
+        .amount-btn {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="benevolat-hero">
+    <h1>🤝 Rejoindre la Communauté NIRD</h1>
+    <p>
+        Ensemble, construisons un avenir numérique plus souverain, durable et inclusif.
+        Que tu sois étudiant, enseignant, développeur ou simple citoyen engagé,
+        ta contribution compte !
+    </p>
+</div>
+
+<div class="mission-section">
+    <h2>🎯 Notre Mission Caritative</h2>
+    <p>
+        Le projet NIRD Quest est une initiative <strong>bénévole et à but non lucratif</strong>
+        visant à sensibiliser les établissements scolaires et le grand public aux enjeux
+        de la souveraineté numérique.
+    </p>
+    <p>
+        Nos actions se concentrent sur :
+    </p>
+    <ul style="color: #4A5568; line-height: 2; margin-left: 2rem; font-size: 1.1rem;">
+        <li>🎓 <strong>Éducation</strong> : Formations gratuites Linux et logiciels libres</li>
+        <li>♻️ <strong>Réemploi</strong> : Reconditionnement d'ordinateurs pour écoles</li>
+        <li>🌍 <strong>Souveraineté</strong> : Accompagnement migration vers solutions européennes</li>
+        <li>🤝 <strong>Inclusion</strong> : Accessibilité numérique pour tous</li>
+        <li>📚 <strong>Communs</strong> : Création de ressources pédagogiques libres</li>
+    </ul>
+</div>
+
+<div class="action-cards">
+    <div class="action-card">
+        <div class="icon">👨‍💻</div>
+        <h3>Contribuer au Code</h3>
+        <p>Développeurs, designers, testeurs : aidez-nous à améliorer NIRD Quest et créer de nouveaux mini-jeux !</p>
+        <a href="https://github.com/nird-quest" target="_blank" class="btn-action">Voir sur GitHub</a>
+    </div>
+
+    <div class="action-card">
+        <div class="icon">📝</div>
+        <h3>Créer du Contenu</h3>
+        <p>Rédige des tutoriels, traduis des docs, crée des vidéos pédagogiques sur Linux et le libre.</p>
+        <a href="#" class="btn-action">Proposer une Idée</a>
+    </div>
+
+    <div class="action-card">
+        <div class="icon">🎓</div>
+        <h3>Animer des Ateliers</h3>
+        <p>Organise des sessions de formation dans ton école ou ta ville sur les logiciels libres.</p>
+        <a href="#" class="btn-action">Devenir Ambassadeur</a>
+    </div>
+</div>
+
+<div class="discord-section">
+    <h2>💬 Rejoins notre Discord !</h2>
+    <p>
+        Discute avec la communauté, pose tes questions, partage tes projets
+        et participe aux événements mensuels (install parties, hackathons, conférences).
+    </p>
+    <a href="https://discord.gg/Avn729Av2x" target="_blank" class="btn-discord">
+        <span style="font-size: 1.5rem; vertical-align: middle;">💬</span>
+        Rejoindre le Discord NIRD
+    </a>
+    <p style="margin-top: 2rem; font-size: 1rem; color: #B8C5E3;">
+        +500 membres • 24/7 • Français & English
+    </p>
+</div>
+
+<div class="wero-section">
+    <h2>💶 Soutenir Financièrement (Wero)</h2>
+    <p>
+        Ton soutien financier nous permet de financer l'hébergement, acheter du matériel
+        reconditionné pour les écoles, et organiser des événements gratuits.
+    </p>
+
+    <div class="wero-info">
+        <h3>🇫🇷 Pourquoi Wero ?</h3>
+        <ul>
+            <li><strong>Solution européenne</strong> : Alternative française aux géants américains (PayPal, Stripe)</li>
+            <li><strong>Souveraineté</strong> : Données et transactions en Europe (RGPD strict)</li>
+            <li><strong>Sécurisé</strong> : Chiffrement bancaire, pas de revente de données</li>
+            <li><strong>Instantané</strong> : Transferts en temps réel entre comptes européens</li>
+            <li><strong>Sans frais</strong> : Pas de commission (contrairement à PayPal 3-5%)</li>
+        </ul>
+    </div>
+
+    <p style="font-weight: bold; color: #2D3748; font-size: 1.2rem;">
+        Choisis ton montant :
+    </p>
+
+    <div class="donation-amounts">
+        <button class="amount-btn" onclick="selectAmount(5)">5€</button>
+        <button class="amount-btn" onclick="selectAmount(10)">10€</button>
+        <button class="amount-btn" onclick="selectAmount(20)">20€</button>
+        <button class="amount-btn" onclick="selectAmount(50)">50€</button>
+    </div>
+
+    <div style="text-align: center; margin-top: 2rem;">
+        <button class="btn-wero" onclick="donateWithWero()">
+            💳 Donner via Wero
+        </button>
+    </div>
+
+    <p style="margin-top: 2rem; font-size: 0.95rem; color: #718096; text-align: center;">
+        💡 <strong>100% transparent</strong> : Rapport annuel publié avec détail des dépenses
+    </p>
+</div>
+
+<div class="mission-section">
+    <h2>🌟 Témoignages de la Communauté</h2>
+    
+    <div class="testimonials">
+        <div class="testimonial">
+            <p>"Grâce à NIRD Quest, j'ai découvert Linux et installé Ubuntu sur mon vieux PC. Il fonctionne mieux que sous Windows !"</p>
+            <div class="author">— Marie, étudiante en informatique</div>
+        </div>
+
+        <div class="testimonial">
+            <p>"En tant que prof, j'utilise maintenant NIRD Quest en cours. Mes élèves comprennent enfin les enjeux du numérique libre."</p>
+            <div class="author">— Thomas, enseignant de technologie</div>
+        </div>
+
+        <div class="testimonial">
+            <p>"J'ai participé à un atelier de reconditionnement. On a sauvé 15 ordinateurs de la décharge et équipé une école rurale !"</p>
+            <div class="author">— Sophie, bénévole</div>
+        </div>
+    </div>
+</div>
+
+<div style="background: linear-gradient(135deg, #8BC34A, #558B2F); color: white; border-radius: 20px; padding: 3rem; text-align: center; margin-bottom: 3rem;">
+    <h2 style="font-size: 2rem; margin-bottom: 1rem;">🚀 Prêt à passer à l'action ?</h2>
+    <p style="font-size: 1.2rem; margin-bottom: 2rem; color: #F1F8E9;">
+        Chaque contribution compte, qu'elle soit technique, pédagogique ou financière.
+    </p>
+    <a href="https://discord.gg/Avn729Av2x" target="_blank" class="btn-action" style="background: white; color: #558B2F; padding: 1rem 2rem; font-size: 1.1rem;">
+        💬 Commencer sur Discord
+    </a>
+</div>
+
+<script>
+    let selectedAmount = 10;
+
+    function selectAmount(amount) {
+        selectedAmount = amount;
+        
+        // Retirer la classe selected de tous les boutons
+        document.querySelectorAll('.amount-btn').forEach(btn => {
+            btn.classList.remove('selected');
+        });
+        
+        // Ajouter selected au bouton cliqué
+        event.target.classList.add('selected');
+    }
+
+    function donateWithWero() {
+        // IMPORTANT : Remplacer par le vrai lien Wero quand disponible
+        alert(`🙏 Merci pour ton soutien de ${selectedAmount}€ !\n\n` +
+              `Redirection vers Wero en cours...\n\n` +
+              `(Pour l'instant, le paiement Wero n'est pas encore configuré. ` +
+              `Contacte-nous sur Discord pour d'autres moyens de soutien !)`);
+        
+        // Quand Wero sera configuré, utiliser :
+        // window.location.href = `https://wero.payment.link?amount=${selectedAmount}&project=nird-quest`;
+    }
+
+    // Sélectionner 10€ par défaut
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.amount-btn')[1].classList.add('selected');
+    });
+</script>
+{% endblock %}

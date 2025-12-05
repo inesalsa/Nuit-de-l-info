@@ -1,0 +1,450 @@
+{% extends "base.html" %}
+
+{% block title %}Paramètres - NIRD Quest{% endblock %}
+
+{% block extra_css %}
+<style>
+    .settings-container {
+        max-width: 800px;
+        margin: 3rem auto;
+        background: white;
+        border-radius: 20px;
+        padding: 3rem;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .settings-container h1 {
+        color: #4A90E2;
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        text-align: center;
+    }
+
+    .settings-subtitle {
+        text-align: center;
+        color: #718096;
+        margin-bottom: 3rem;
+        font-size: 1.1rem;
+    }
+
+    .setting-section {
+        margin-bottom: 2.5rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid #E2E8F0;
+    }
+
+    .setting-section:last-child {
+        border-bottom: none;
+    }
+
+    .setting-section h2 {
+        color: #2D3748;
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .setting-section .description {
+        color: #718096;
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+    }
+
+    .toggle-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem;
+        background: #F7FAFC;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+    }
+
+    .toggle-label {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .toggle-label .icon {
+        font-size: 2rem;
+    }
+
+    .toggle-label .text {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .toggle-label .text strong {
+        color: #2D3748;
+        font-size: 1.1rem;
+    }
+
+    .toggle-label .text span {
+        color: #718096;
+        font-size: 0.9rem;
+    }
+
+    /* TOGGLE SWITCH */
+    .toggle-switch {
+        position: relative;
+        width: 60px;
+        height: 30px;
+    }
+
+    .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #CBD5E0;
+        transition: 0.4s;
+        border-radius: 30px;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 22px;
+        width: 22px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+    }
+
+    input:checked + .slider {
+        background-color: #4A90E2;
+    }
+
+    input:checked + .slider:before {
+        transform: translateX(30px);
+    }
+
+    /* RADIO BUTTONS */
+    .radio-group {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .radio-option {
+        flex: 1;
+        min-width: 120px;
+    }
+
+    .radio-option input[type="radio"] {
+        display: none;
+    }
+
+    .radio-option label {
+        display: block;
+        padding: 1rem;
+        background: #F7FAFC;
+        border: 2px solid #E2E8F0;
+        border-radius: 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-weight: bold;
+        color: #2D3748;
+    }
+
+    .radio-option input[type="radio"]:checked + label {
+        background: #4A90E2;
+        color: white;
+        border-color: #4A90E2;
+    }
+
+    .radio-option label:hover {
+        border-color: #4A90E2;
+    }
+
+    .save-button {
+        display: block;
+        width: 100%;
+        background: linear-gradient(135deg, #8BC34A, #558B2F);
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        font-size: 1.2rem;
+        font-weight: bold;
+        border-radius: 30px;
+        cursor: pointer;
+        margin-top: 2rem;
+        transition: all 0.3s;
+    }
+
+    .save-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(139, 195, 74, 0.4);
+    }
+
+    .info-box {
+        background: #E3F2FD;
+        border: 2px solid #4A90E2;
+        border-radius: 10px;
+        padding: 1rem;
+        margin-top: 1rem;
+        color: #1565C0;
+        line-height: 1.6;
+    }
+
+    .info-box strong {
+        color: #0D47A1;
+    }
+
+    /* POLICE DYSLEXIE PREVIEW */
+    .dyslexic-preview {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: #F7FAFC;
+        border-radius: 10px;
+        font-size: 1.2rem;
+        text-align: center;
+        color: #2D3748;
+    }
+
+    body.dyslexic * {
+        font-family: 'OpenDyslexic', 'Comic Sans MS', sans-serif !important;
+    }
+
+    body.size-small {
+        font-size: 14px;
+    }
+
+    body.size-large {
+        font-size: 18px;
+    }
+
+    body.high-contrast {
+        filter: contrast(1.3);
+    }
+
+    body.high-contrast .settings-container {
+        background: #1A202C;
+        color: #F7FAFC;
+    }
+
+    body.high-contrast h1,
+    body.high-contrast h2,
+    body.high-contrast strong {
+        color: #63B3ED !important;
+    }
+
+    body.high-contrast .toggle-label .text span,
+    body.high-contrast .description {
+        color: #CBD5E0 !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="settings-container">
+    <h1>⚙️ Paramètres</h1>
+    <p class="settings-subtitle">Personnalise ton expérience NIRD Quest</p>
+
+    <!-- MODE DYSLEXIE -->
+    <div class="setting-section">
+        <h2>📖 Mode Dyslexie</h2>
+        <p class="description">Active une police de caractères spécialement conçue pour faciliter la lecture aux personnes dyslexiques.</p>
+        
+        <div class="toggle-container">
+            <div class="toggle-label">
+                <span class="icon">🔤</span>
+                <div class="text">
+                    <strong>Police OpenDyslexic</strong>
+                    <span>Caractères plus espacés et distincts</span>
+                </div>
+            </div>
+            <label class="toggle-switch">
+                <input type="checkbox" id="dyslexicMode">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <div class="info-box">
+            <strong>ℹ️ À propos :</strong> OpenDyslexic est une police libre spécialement conçue pour améliorer la lisibilité pour les personnes dyslexiques. Les lettres ont une base plus lourde pour éviter les confusions.
+        </div>
+
+        <div class="dyslexic-preview" id="dyslexicPreview" style="display: none;">
+            Aperçu : Le renard brun saute par-dessus le chien paresseux. 1234567890
+        </div>
+    </div>
+
+    <!-- TAILLE DE POLICE -->
+    <div class="setting-section">
+        <h2>🔍 Taille de Police</h2>
+        <p class="description">Ajuste la taille du texte pour un meilleur confort de lecture.</p>
+        
+        <div class="radio-group">
+            <div class="radio-option">
+                <input type="radio" id="size-small" name="fontSize" value="small">
+                <label for="size-small">Petit<br>14px</label>
+            </div>
+            <div class="radio-option">
+                <input type="radio" id="size-normal" name="fontSize" value="normal" checked>
+                <label for="size-normal">Normal<br>16px</label>
+            </div>
+            <div class="radio-option">
+                <input type="radio" id="size-large" name="fontSize" value="large">
+                <label for="size-large">Grand<br>18px</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTRASTE ÉLEVÉ -->
+    <div class="setting-section">
+        <h2>🌓 Contraste Élevé</h2>
+        <p class="description">Augmente le contraste des couleurs pour améliorer la lisibilité (recommandé pour malvoyants).</p>
+        
+        <div class="toggle-container">
+            <div class="toggle-label">
+                <span class="icon">◐</span>
+                <div class="text">
+                    <strong>Activer Contraste Élevé</strong>
+                    <span>Couleurs plus vives et distinctes</span>
+                </div>
+            </div>
+            <label class="toggle-switch">
+                <input type="checkbox" id="highContrast">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <!-- ANIMATIONS -->
+    <div class="setting-section">
+        <h2>✨ Animations</h2>
+        <p class="description">Désactive les animations si elles te distraient ou provoquent des gênes.</p>
+        
+        <div class="toggle-container">
+            <div class="toggle-label">
+                <span class="icon">🎬</span>
+                <div class="text">
+                    <strong>Animations Activées</strong>
+                    <span>Transitions et effets visuels</span>
+                </div>
+            </div>
+            <label class="toggle-switch">
+                <input type="checkbox" id="animations" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <button class="save-button" onclick="saveSettings()">💾 Sauvegarder les Paramètres</button>
+
+    <div class="info-box" style="margin-top: 2rem;">
+        <strong>💡 Bon à savoir :</strong> Tes préférences sont sauvegardées localement dans ton navigateur et s'appliquent automatiquement à chaque visite.
+    </div>
+</div>
+
+<script>
+    // CHARGER LES PARAMÈTRES
+    function loadSettings() {
+        const settings = JSON.parse(localStorage.getItem('nird_settings') || '{}');
+        
+        // Mode dyslexie
+        if (settings.dyslexic) {
+            document.getElementById('dyslexicMode').checked = true;
+            document.body.classList.add('dyslexic');
+            document.getElementById('dyslexicPreview').style.display = 'block';
+        }
+        
+        // Taille police
+        const fontSize = settings.fontSize || 'normal';
+        document.getElementById(`size-${fontSize}`).checked = true;
+        if (fontSize !== 'normal') {
+            document.body.classList.add(`size-${fontSize}`);
+        }
+        
+        // Contraste élevé
+        if (settings.highContrast) {
+            document.getElementById('highContrast').checked = true;
+            document.body.classList.add('high-contrast');
+        }
+        
+        // Animations
+        if (settings.animations === false) {
+            document.getElementById('animations').checked = false;
+            document.body.style.setProperty('--animation-speed', '0s');
+        }
+    }
+
+    // SAUVEGARDER LES PARAMÈTRES
+    function saveSettings() {
+        const settings = {
+            dyslexic: document.getElementById('dyslexicMode').checked,
+            fontSize: document.querySelector('input[name="fontSize"]:checked').value,
+            highContrast: document.getElementById('highContrast').checked,
+            animations: document.getElementById('animations').checked
+        };
+        
+        localStorage.setItem('nird_settings', JSON.stringify(settings));
+        
+        // Appliquer immédiatement
+        applySettings(settings);
+        
+        // Notification
+        alert('✅ Paramètres sauvegardés avec succès !');
+    }
+
+    // APPLIQUER LES PARAMÈTRES
+    function applySettings(settings) {
+        // Dyslexie
+        document.body.classList.toggle('dyslexic', settings.dyslexic);
+        
+        // Taille police
+        document.body.classList.remove('size-small', 'size-large');
+        if (settings.fontSize !== 'normal') {
+            document.body.classList.add(`size-${settings.fontSize}`);
+        }
+        
+        // Contraste
+        document.body.classList.toggle('high-contrast', settings.highContrast);
+        
+        // Animations
+        if (!settings.animations) {
+            document.body.style.setProperty('--animation-speed', '0s');
+        } else {
+            document.body.style.removeProperty('--animation-speed');
+        }
+    }
+
+    // PREVIEW MODE DYSLEXIE
+    document.getElementById('dyslexicMode').addEventListener('change', function() {
+        document.getElementById('dyslexicPreview').style.display = this.checked ? 'block' : 'none';
+        document.body.classList.toggle('dyslexic', this.checked);
+    });
+
+    // PREVIEW TAILLE POLICE
+    document.querySelectorAll('input[name="fontSize"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            document.body.classList.remove('size-small', 'size-large');
+            if (this.value !== 'normal') {
+                document.body.classList.add(`size-${this.value}`);
+            }
+        });
+    });
+
+    // PREVIEW CONTRASTE
+    document.getElementById('highContrast').addEventListener('change', function() {
+        document.body.classList.toggle('high-contrast', this.checked);
+    });
+
+    // Charger au démarrage
+    loadSettings();
+</script>
+{% endblock %}
